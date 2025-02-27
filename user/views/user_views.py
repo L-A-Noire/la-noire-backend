@@ -1,17 +1,18 @@
 from rest_framework import generics, permissions, status
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import AllowAny
-from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import get_object_or_404
-
-from user.models import User, Role
-from user.seiralizers import UserListWithRoleSerializer, ChangeUserRoleSerializer
-from user.permissions import IsAdminUser
 
 from user.models import User
-from user.seiralizers import LoginSerializer, RegisterSerializer, UserSerializer
+from user.permissions import IsAdminUser
+from user.seiralizers import (
+    ChangeUserRoleSerializer,
+    LoginSerializer,
+    RegisterSerializer,
+    UserListWithRoleSerializer,
+    UserSerializer,
+)
 
 
 class RegisterView(generics.CreateAPIView):
@@ -85,10 +86,8 @@ class EmployeesCountView(APIView):
         return Response({"totalEmployees": count})
 
 
-
-
 class UserListView(generics.ListAPIView):
-    queryset = User.objects.all().select_related('role').order_by('-date_joined')
+    queryset = User.objects.all().select_related("role").order_by("-date_joined")
     serializer_class = UserListWithRoleSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
 
@@ -96,34 +95,37 @@ class UserListView(generics.ListAPIView):
 class UserRoleUpdateView(generics.GenericAPIView):
     serializer_class = ChangeUserRoleSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
-    
+
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
+
         user = serializer.validated_data["user"]
         role = serializer.validated_data["role"]
-        
+
         old_role_title = user.role.title if user.role else "No Role"
-        
+
         user.role = role
         user.save()
-        
-        return Response({
-            "message": f"User role updated successfully from '{old_role_title}' to '{role.title}'.",
-            "user": {
-                "id": user.id,
-                "username": user.username,
-                "email": user.email,
-                "old_role": old_role_title,
-                "new_role": role.title,
-                "new_role_id": role.id
-            }
-        }, status=status.HTTP_200_OK)
+
+        return Response(
+            {
+                "message": f"User role updated successfully from '{old_role_title}' to '{role.title}'.",
+                "user": {
+                    "id": user.id,
+                    "username": user.username,
+                    "email": user.email,
+                    "old_role": old_role_title,
+                    "new_role": role.title,
+                    "new_role_id": role.id,
+                },
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
 class UserRoleDetailView(generics.RetrieveAPIView):
-    queryset = User.objects.all().select_related('role')
+    queryset = User.objects.all().select_related("role")
     serializer_class = UserListWithRoleSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
-    lookup_field = 'pk'
+    lookup_field = "pk"

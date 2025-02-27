@@ -1,8 +1,9 @@
 from rest_framework import serializers
+
+from crime.serializers import CaseSerializer
 from reward.models import Report
 from suspect.serializers.suspect_serializers import SuspectSerializer
 from user.seiralizers import UserSerializer
-from crime.serializers import CaseSerializer
 
 
 class ReportSerializer(serializers.ModelSerializer):

@@ -1,7 +1,7 @@
-from django.urls import reverse
-from rest_framework.test import APITestCase
-from rest_framework import status
 from django.contrib.auth import get_user_model
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APITestCase
 
 from user.models import Role
 
@@ -56,12 +56,6 @@ class UserModuleTests(APITestCase):
         self.assertEqual(user.role.title, "Base User")
 
     def test_login_fails_with_wrong_password(self):
-        user = User.objects.create_user(
-            username="testuser",
-            password="correctpass",
-            role=self.base_role,
-        )
-
         url = reverse("login")
         response = self.client.post(
             url,

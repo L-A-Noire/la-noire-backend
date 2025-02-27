@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from reward.models.reward import Reward
 
 

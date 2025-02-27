@@ -2,6 +2,7 @@ import io
 import random
 import uuid
 
+from detective_board.models import BoardConnection, BoardItem, DetectiveBoard
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 from django.db import transaction
@@ -10,7 +11,6 @@ from faker import Faker
 from PIL import Image as PilImage
 
 from crime.models import Case, CaseReport, Complaint, Crime, CrimeScene
-from detective_board.models import BoardConnection, BoardItem, DetectiveBoard
 from reward.models import Payment, Report, Reward
 from suspect.models import Interrogation, Punishment, SuspectCrime
 from user.models import Role, User

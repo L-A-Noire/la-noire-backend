@@ -1,11 +1,11 @@
-from .evidence_admin import EvidenceAdmin
-from .testimony_admin import TestimonyAdmin
 from .attachment_admin import AttachmentAdmin
-from .image_admin import ImageAdmin
 from .biological_evidence_admin import BiologicalEvidenceAdmin
+from .evidence_admin import EvidenceAdmin
 from .identification_evidence_admin import IdentificationEvidenceAdmin
-from .vehicle_evidence_admin import VehicleEvidenceAdmin
+from .image_admin import ImageAdmin
 from .other_evidence_admin import OtherEvidenceAdmin
+from .testimony_admin import TestimonyAdmin
+from .vehicle_evidence_admin import VehicleEvidenceAdmin
 
 __all__ = [
     "EvidenceAdmin",

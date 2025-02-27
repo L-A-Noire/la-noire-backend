@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from suspect.models.punishment import Punishment
 
 

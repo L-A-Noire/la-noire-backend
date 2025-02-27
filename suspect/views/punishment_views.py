@@ -3,6 +3,7 @@ from django.utils import timezone
 from rest_framework import generics, status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+
 from suspect.models import Punishment, SuspectCrime
 from suspect.permissions import IsJudge, IsSergeant
 from suspect.serializers import (

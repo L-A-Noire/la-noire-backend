@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from crime.models.case_report import CaseReport
 
 

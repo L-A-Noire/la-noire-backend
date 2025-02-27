@@ -1,2 +1,8 @@
 from .role_serializers import RoleDetailSerializer, RoleSerializer
-from .user_serializers import LoginSerializer, RegisterSerializer, UserSerializer, UserListWithRoleSerializer, ChangeUserRoleSerializer
+from .user_serializers import (
+    ChangeUserRoleSerializer,
+    LoginSerializer,
+    RegisterSerializer,
+    UserListWithRoleSerializer,
+    UserSerializer,
+)

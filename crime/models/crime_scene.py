@@ -1,6 +1,6 @@
 from django.db import models
 
-from crime.models import Crime, Case
+from crime.models import Case, Crime
 from witness.models import Testimony
 
 

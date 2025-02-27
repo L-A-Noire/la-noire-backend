@@ -1,11 +1,12 @@
 from django.utils import timezone
 from drf_spectacular.utils import OpenApiResponse, extend_schema
-from rest_framework import viewsets, status
-from rest_framework.response import Response
+from rest_framework import status, viewsets
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from reward.models import Reward
+from reward.permissions import CanViewRewardInfo
 from reward.serializers import (
     ClaimRewardErrorSerializer,
     ClaimRewardRequestSerializer,
@@ -13,7 +14,6 @@ from reward.serializers import (
     RewardDetailSerializer,
     RewardSerializer,
 )
-from reward.permissions import CanViewRewardInfo
 
 
 class MyRewardsView(APIView):

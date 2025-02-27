@@ -1,4 +1,5 @@
 from django.db import models
+
 from crime.models import Case
 from suspect.models.suspect import Suspect
 

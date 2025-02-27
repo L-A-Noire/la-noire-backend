@@ -1,15 +1,15 @@
-from rest_framework import viewsets, status, generics
-from rest_framework.response import Response
+from rest_framework import generics, status, viewsets
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from reward.models import Report, Reward
+from reward.permissions import IsBaseUser, IsDetective, IsPoliceOfficer
 from reward.serializers import (
-    ReportSerializer,
     ReportCreateSerializer,
-    ReportReviewSerializer,
     ReportDetailSerializer,
+    ReportReviewSerializer,
+    ReportSerializer,
 )
-from reward.permissions import IsBaseUser, IsPoliceOfficer, IsDetective
 
 
 class ReportViewSet(viewsets.ModelViewSet):

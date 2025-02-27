@@ -1,13 +1,14 @@
 from rest_framework.routers import DefaultRouter
+
 from .views import (
     AttachmentViewSet,
     BiologicalEvidenceViewSet,
+    EvidenceListViewSet,
     IdentificationEvidenceViewSet,
     ImageViewSet,
     OtherEvidenceViewSet,
     TestimonyViewSet,
     VehicleEvidenceViewSet,
-    EvidenceListViewSet,
 )
 
 router = DefaultRouter()

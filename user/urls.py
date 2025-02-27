@@ -11,8 +11,8 @@ from user.views import (
 from user.views.user_views import (
     EmployeesCountView,
     UserListView,
-    UserRoleUpdateView,
     UserRoleDetailView,
+    UserRoleUpdateView,
 )
 
 urlpatterns = [

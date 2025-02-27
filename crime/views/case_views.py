@@ -64,7 +64,9 @@ class CaseViewSet(viewsets.ModelViewSet):
             )
 
     @action(
-        detail=True, methods=["post"], permission_classes=[IsAuthenticated & (IsSergeant | IsJudge)]
+        detail=True,
+        methods=["post"],
+        permission_classes=[IsAuthenticated & (IsSergeant | IsJudge)],
     )
     def close_case(self, request, pk=None):
         case = self.get_object()
