@@ -37,12 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'crimes',
+    'crime',
     'detective_board',
-    'rewards',
-    'suspects',
-    'users',
-    'witnesses',
+    'reward',
+    'suspect',
+    'user',
+    'witness',
 ]
 
 MIDDLEWARE = [
