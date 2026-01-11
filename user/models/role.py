@@ -2,4 +2,4 @@ from django.db import models
 
 
 class Role(models.Model):
-    pass
+    title = models.CharField(max_length=100)
