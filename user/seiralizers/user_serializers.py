@@ -39,7 +39,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         validated_data.pop('password2')
         password = validated_data.pop('password')
 
-        default_role, _ = Role.objects.get_or_create(title="Regular User")
+        default_role, _ = Role.objects.get_or_create(title="Base User")
 
         user = User.objects.create(**validated_data, role=default_role)
         user.set_password(password)
