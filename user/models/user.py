@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.core.exceptions import ValidationError
 
 
 class User(AbstractUser):
@@ -51,4 +52,12 @@ class User(AbstractUser):
         on_delete=models.PROTECT,
     )
 
-    # ToDo: add constraint for existence of at least one of the identifiers
+    # add constraint for existence of at least one of the identifiers
+    def clean(self):
+        if not any([self.username, self.email, self.phone, self.national_id]):
+            raise ValidationError(
+                "At least one of username, email, phone, or national_id must be provided")
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
