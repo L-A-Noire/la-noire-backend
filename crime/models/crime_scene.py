@@ -32,3 +32,7 @@ class CrimeScene(models.Model):
         to="user.User",
         related_name="witnessed_scenes",
     )
+
+    # optional
+    location = models.CharField(max_length=500)
+    description = models.TextField()

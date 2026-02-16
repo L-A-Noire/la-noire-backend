@@ -36,3 +36,21 @@ class Complaint(models.Model):
         null=True,
         blank=True,
     )
+
+    # optional
+    title = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
+    COMPLAINT_STATUS = (
+        ("pending_cadet"),
+        ("rejected_by_cadet"),
+        ("pending_officer"),
+        ("rejected_by_officer"),
+        ("approved"),
+        ("case_created"),
+        ("invalid"),
+    )
+    status = models.CharField(
+        max_length=20, choices=COMPLAINT_STATUS, default="pending_cadet")
+
+    is_confirmed_by_officer = models.BooleanField(null=True, blank=True)
+    officer_rejection_reason = models.TextField(blank=True, null=True)
