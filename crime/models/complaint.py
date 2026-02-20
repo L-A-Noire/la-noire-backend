@@ -2,6 +2,15 @@ from django.db import models
 
 
 class Complaint(models.Model):
+    COMPLAINT_STATUS = (
+        ("pending_cadet", "Pending Cadet"),
+        ("rejected_by_cadet", "Rejected by Cadet"),
+        ("pending_officer", "Pending Officer"),
+        ("rejected_by_officer", "Rejected by Officer"),
+        ("approved", "Approved"),
+        ("invalid", "Invalid"),
+    )
+
     complainants = models.ManyToManyField(
         to="user.User",
         related_name="complaints",
@@ -15,9 +24,7 @@ class Complaint(models.Model):
         related_name="cadet_complaints",
     )
 
-    is_confirmed_by_cadet = models.BooleanField()
-
-    rejection_reason = models.TextField()
+    cadet_rejection_reason = models.TextField()
 
     police_officer = models.ForeignKey(
         to="user.User",
@@ -37,20 +44,12 @@ class Complaint(models.Model):
         blank=True,
     )
 
-    # optional
     title = models.CharField(max_length=200)
-    created_at = models.DateTimeField(auto_now_add=True)
-    COMPLAINT_STATUS = (
-        ("pending_cadet"),
-        ("rejected_by_cadet"),
-        ("pending_officer"),
-        ("rejected_by_officer"),
-        ("approved"),
-        ("case_created"),
-        ("invalid"),
-    )
-    status = models.CharField(
-        max_length=20, choices=COMPLAINT_STATUS, default="pending_cadet")
 
-    is_confirmed_by_officer = models.BooleanField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    status = models.CharField(
+        max_length=20, choices=COMPLAINT_STATUS, default="pending_cadet"
+    )
+
     officer_rejection_reason = models.TextField(blank=True, null=True)
