@@ -10,7 +10,6 @@ class Case(models.Model):
         blank=True,
     )
 
-    title = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     is_from_crime_scene = models.BooleanField(default=False)
     is_closed = models.BooleanField(default=False)

@@ -14,16 +14,15 @@ class CaseReport(models.Model):
         related_name="case_report",
     )
 
-    # optional
     reported_at = models.DateTimeField(auto_now_add=True)
     REPORT_STATUS = (
-        ("pending"),
-        ("approved"),
-        ("rejected"),
+        ("pending", "pending state"),
+        ("approved", "aproved state"),
+        ("rejected", "rejected state"),
     )
-    description = models.TextField()
-    status = models.CharField(max_length=20, choices=REPORT_STATUS)
-    # for rejection:
+    description = models.TextField(null=True)
+    status = models.CharField(
+        max_length=20, choices=REPORT_STATUS, default="pending")
     rejection_reason = models.TextField(blank=True, null=True)
     reviewed_by = models.ForeignKey(
         to="user.User",

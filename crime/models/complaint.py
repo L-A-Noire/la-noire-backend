@@ -24,7 +24,7 @@ class Complaint(models.Model):
         related_name="cadet_complaints",
     )
 
-    cadet_rejection_reason = models.TextField()
+    cadet_rejection_reason = models.TextField(default="Null")
 
     police_officer = models.ForeignKey(
         to="user.User",
@@ -43,8 +43,6 @@ class Complaint(models.Model):
         null=True,
         blank=True,
     )
-
-    title = models.CharField(max_length=200)
 
     created_at = models.DateTimeField(auto_now_add=True)
 

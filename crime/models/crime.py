@@ -9,9 +9,9 @@ class Crime(models.Model):
         ("3", "level_3"),
     )
 
-    title = models.CharField(max_length=200)
-    description = models.TextField()
+    title = models.CharField(max_length=200, null=True)
+    description = models.TextField(null=True)
     level = models.CharField(max_length=50, choices=LEVEL_CHOICES)
-    committed_at = models.DateTimeField()
-    location = models.CharField(max_length=500)
+    committed_at = models.DateTimeField(null=True)
+    location = models.CharField(max_length=500, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

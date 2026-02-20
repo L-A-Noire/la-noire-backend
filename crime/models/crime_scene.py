@@ -33,5 +33,5 @@ class CrimeScene(models.Model):
         related_name="witnessed_scenes",
     )
 
-    location = models.CharField(max_length=500)
-    description = models.TextField()
+    location = models.CharField(max_length=500, null=True)
+    description = models.TextField(null=True)
