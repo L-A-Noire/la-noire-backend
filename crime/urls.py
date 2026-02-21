@@ -13,6 +13,7 @@ from crime.views.crime_scene_views import CrimeSceneViewSet
 from crime.views.crime_views import CrimeViewSet
 
 router = DefaultRouter()
+router.include_format_suffixes = False
 router.register(r"complaints", ComplaintViewSet, basename="complaint")
 router.register(r"crime-scenes", CrimeSceneViewSet, basename="crime-scene")
 router.register(r"crimes", CrimeViewSet, basename="crime")

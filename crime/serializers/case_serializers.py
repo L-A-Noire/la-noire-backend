@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from crime.models import Case
-from crime.serializers import CrimeSerializer
+from crime.serializers.crime_serializers import CrimeSerializer
 from user.seiralizers import UserSerializer
 
 

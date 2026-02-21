@@ -13,6 +13,7 @@ from suspect.views import (
 )
 
 router = DefaultRouter()
+router.include_format_suffixes = False
 router.register(r"suspect-crimes", SuspectCrimeViewSet, basename="suspect-crime")
 router.register(r"interrogations", InterrogationViewSet, basename="interrogation")
 router.register(r"punishments", PunishmentViewSet, basename="punishment")
