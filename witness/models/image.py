@@ -4,7 +4,7 @@ from user.models import User
 
 
 class Image(models.Model):
-    image = models.ImageField(upload_to='images')
+    image = models.ImageField(upload_to="images")
 
     uploaded_by = models.ForeignKey(
         User,

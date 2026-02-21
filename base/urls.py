@@ -28,6 +28,7 @@ urlpatterns = [
     path("api/auth/", include("user.urls")),
     path("api/crime/", include("crime.urls")),
     path("api/suspect/", include("suspect.urls")),
+    path("api/reward/", include("reward.urls")),
     # Swagger URLs
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
