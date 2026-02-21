@@ -3,9 +3,9 @@ from django.db import models
 
 class Crime(models.Model):
     LEVEL_CHOICES = (
-        ("1", "level_1"),
+        ("1", "level_3"),
         ("2", "level_2"),
-        ("3", "level_3"),
+        ("3", "level_1"),
         ("4", "critical"),
     )
 
