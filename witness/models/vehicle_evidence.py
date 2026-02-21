@@ -30,14 +30,14 @@ class VehicleEvidence(Evidence):
             models.CheckConstraint(
                 name="exactly_one_of_serial_or_plate",
                 condition=(
-                        (
-                                Q(serial_number__isnull=False) &
-                                Q(registration_plate_number__isnull=True)
-                        ) |
-                        (
-                                Q(serial_number__isnull=True) &
-                                Q(registration_plate_number__isnull=False)
-                        )
+                    (
+                        Q(serial_number__isnull=False)
+                        & Q(registration_plate_number__isnull=True)
+                    )
+                    | (
+                        Q(serial_number__isnull=True)
+                        & Q(registration_plate_number__isnull=False)
+                    )
                 ),
             ),
         ]
