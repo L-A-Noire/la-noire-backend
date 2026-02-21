@@ -9,126 +9,174 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('crime', '0001_initial'),
+        ("crime", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='complaint',
-            name='is_confirmed_by_cadet',
+            model_name="complaint",
+            name="is_confirmed_by_cadet",
         ),
         migrations.RemoveField(
-            model_name='complaint',
-            name='rejection_reason',
+            model_name="complaint",
+            name="rejection_reason",
         ),
         migrations.AddField(
-            model_name='case',
-            name='created_at',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            model_name="case",
+            name="created_at",
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='case',
-            name='detective',
-            field=models.ForeignKey(blank=True, limit_choices_to={'role__title': 'Detective'}, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='detective_cases', to=settings.AUTH_USER_MODEL),
+            model_name="case",
+            name="detective",
+            field=models.ForeignKey(
+                blank=True,
+                limit_choices_to={"role__title": "Detective"},
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="detective_cases",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='case',
-            name='is_closed',
+            model_name="case",
+            name="is_closed",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='case',
-            name='is_from_crime_scene',
+            model_name="case",
+            name="is_from_crime_scene",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='casereport',
-            name='description',
+            model_name="casereport",
+            name="description",
             field=models.TextField(null=True),
         ),
         migrations.AddField(
-            model_name='casereport',
-            name='rejection_reason',
+            model_name="casereport",
+            name="rejection_reason",
             field=models.TextField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='casereport',
-            name='reported_at',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            model_name="casereport",
+            name="reported_at",
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='casereport',
-            name='reviewed_by',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='reviewed_reports', to=settings.AUTH_USER_MODEL),
+            model_name="casereport",
+            name="reviewed_by",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="reviewed_reports",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='casereport',
-            name='status',
-            field=models.CharField(choices=[('pending', 'pending state'), ('approved', 'aproved state'), ('rejected', 'rejected state')], default='pending', max_length=20),
+            model_name="casereport",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("pending", "pending state"),
+                    ("approved", "aproved state"),
+                    ("rejected", "rejected state"),
+                ],
+                default="pending",
+                max_length=20,
+            ),
         ),
         migrations.AddField(
-            model_name='complaint',
-            name='cadet_rejection_reason',
-            field=models.TextField(default='Null'),
+            model_name="complaint",
+            name="cadet_rejection_reason",
+            field=models.TextField(default="Null"),
         ),
         migrations.AddField(
-            model_name='complaint',
-            name='created_at',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            model_name="complaint",
+            name="created_at",
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='complaint',
-            name='officer_rejection_reason',
+            model_name="complaint",
+            name="officer_rejection_reason",
             field=models.TextField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='complaint',
-            name='status',
-            field=models.CharField(choices=[('pending_cadet', 'Pending Cadet'), ('rejected_by_cadet', 'Rejected by Cadet'), ('pending_officer', 'Pending Officer'), ('rejected_by_officer', 'Rejected by Officer'), ('approved', 'Approved'), ('invalid', 'Invalid')], default='pending_cadet', max_length=20),
+            model_name="complaint",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("pending_cadet", "Pending Cadet"),
+                    ("rejected_by_cadet", "Rejected by Cadet"),
+                    ("pending_officer", "Pending Officer"),
+                    ("rejected_by_officer", "Rejected by Officer"),
+                    ("approved", "Approved"),
+                    ("invalid", "Invalid"),
+                ],
+                default="pending_cadet",
+                max_length=20,
+            ),
         ),
         migrations.AddField(
-            model_name='crime',
-            name='committed_at',
+            model_name="crime",
+            name="committed_at",
             field=models.DateTimeField(null=True),
         ),
         migrations.AddField(
-            model_name='crime',
-            name='created_at',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            model_name="crime",
+            name="created_at",
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='crime',
-            name='description',
+            model_name="crime",
+            name="description",
             field=models.TextField(null=True),
         ),
         migrations.AddField(
-            model_name='crime',
-            name='location',
+            model_name="crime",
+            name="location",
             field=models.CharField(max_length=500, null=True),
         ),
         migrations.AddField(
-            model_name='crime',
-            name='title',
+            model_name="crime",
+            name="title",
             field=models.CharField(max_length=200, null=True),
         ),
         migrations.AddField(
-            model_name='crimescene',
-            name='description',
+            model_name="crimescene",
+            name="description",
             field=models.TextField(null=True),
         ),
         migrations.AddField(
-            model_name='crimescene',
-            name='location',
+            model_name="crimescene",
+            name="location",
             field=models.CharField(max_length=500, null=True),
         ),
         migrations.AlterField(
-            model_name='crime',
-            name='level',
-            field=models.CharField(choices=[('0', 'critical'), ('1', 'level_1'), ('2', 'level_2'), ('3', 'level_3')], max_length=50),
+            model_name="crime",
+            name="level",
+            field=models.CharField(
+                choices=[
+                    ("0", "critical"),
+                    ("1", "level_1"),
+                    ("2", "level_2"),
+                    ("3", "level_3"),
+                ],
+                max_length=50,
+            ),
         ),
     ]

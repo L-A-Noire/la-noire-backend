@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
-from django.db import models
 from django.core.exceptions import ValidationError
+from django.db import models
 
 
 class User(AbstractUser):
@@ -56,7 +56,8 @@ class User(AbstractUser):
     def clean(self):
         if not any([self.username, self.email, self.phone, self.national_id]):
             raise ValidationError(
-                "At least one of username, email, phone, or national_id must be provided")
+                "At least one of username, email, phone, or national_id must be provided"
+            )
 
     def save(self, *args, **kwargs):
         self.clean()

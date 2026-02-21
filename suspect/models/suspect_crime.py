@@ -1,12 +1,11 @@
 from django.db import models
+
 from crime.models import Case
 
 
 class SuspectCrime(models.Model):
     suspect = models.ForeignKey(
-        to="user.User",
-        on_delete=models.PROTECT,
-        related_name="suspected_crimes"
+        to="user.User", on_delete=models.PROTECT, related_name="suspected_crimes"
     )
 
     case = models.ForeignKey(
@@ -14,14 +13,12 @@ class SuspectCrime(models.Model):
         on_delete=models.PROTECT,
         related_name="suspects",
         null=True,
-        blank=True
+        blank=True,
     )
 
     added_at = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(
-        to="user.User",
-        on_delete=models.PROTECT,
-        related_name="added_suspects"
+        to="user.User", on_delete=models.PROTECT, related_name="added_suspects"
     )
 
     STATUS_CHOICES = (
@@ -32,11 +29,7 @@ class SuspectCrime(models.Model):
         ("innocent", "Innocent"),
     )
 
-    status = models.CharField(
-        max_length=20,
-        choices=STATUS_CHOICES,
-        default="suspect"
-    )
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="suspect")
 
     wanted_since = models.DateTimeField(null=True, blank=True)
     wanted_until = models.DateTimeField(null=True, blank=True)

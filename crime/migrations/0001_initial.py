@@ -15,55 +15,173 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Case',
+            name="Case",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Crime',
+            name="Crime",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('level', models.CharField(max_length=50)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("level", models.CharField(max_length=50)),
             ],
         ),
         migrations.CreateModel(
-            name='CaseReport',
+            name="CaseReport",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('case', models.OneToOneField(on_delete=django.db.models.deletion.PROTECT, related_name='case_report', to='crime.case')),
-                ('reporter', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='case_reports', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "case",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="case_report",
+                        to="crime.case",
+                    ),
+                ),
+                (
+                    "reporter",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="case_reports",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Complaint',
+            name="Complaint",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('description', models.TextField()),
-                ('is_confirmed_by_cadet', models.BooleanField()),
-                ('rejection_reason', models.TextField()),
-                ('rejection_count', models.IntegerField(default=0)),
-                ('cadet', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='cadet_complaints', to=settings.AUTH_USER_MODEL)),
-                ('case', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='complaints', to='crime.case')),
-                ('complainants', models.ManyToManyField(related_name='complaints', to=settings.AUTH_USER_MODEL)),
-                ('police_officer', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='officer_complaints', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("description", models.TextField()),
+                ("is_confirmed_by_cadet", models.BooleanField()),
+                ("rejection_reason", models.TextField()),
+                ("rejection_count", models.IntegerField(default=0)),
+                (
+                    "cadet",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="cadet_complaints",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "case",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="complaints",
+                        to="crime.case",
+                    ),
+                ),
+                (
+                    "complainants",
+                    models.ManyToManyField(
+                        related_name="complaints", to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    "police_officer",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="officer_complaints",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='case',
-            name='crime',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='case', to='crime.crime'),
+            model_name="case",
+            name="crime",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="case",
+                to="crime.crime",
+            ),
         ),
         migrations.CreateModel(
-            name='CrimeScene',
+            name="CrimeScene",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('is_confirmed', models.BooleanField()),
-                ('seen_at', models.DateTimeField()),
-                ('case_report', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='crime_scenes', to='crime.casereport')),
-                ('examiner', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='examined_scenes', to=settings.AUTH_USER_MODEL)),
-                ('viewer', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='viewed_scenes', to=settings.AUTH_USER_MODEL)),
-                ('witnesses', models.ManyToManyField(related_name='witnessed_scenes', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("is_confirmed", models.BooleanField()),
+                ("seen_at", models.DateTimeField()),
+                (
+                    "case_report",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="crime_scenes",
+                        to="crime.casereport",
+                    ),
+                ),
+                (
+                    "examiner",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="examined_scenes",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "viewer",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="viewed_scenes",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "witnesses",
+                    models.ManyToManyField(
+                        related_name="witnessed_scenes", to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
         ),
     ]

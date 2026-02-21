@@ -1,3 +1,3 @@
-from .suspect_crime import SuspectCrime
-from .punishment import Punishment
 from .interrogation import Interrogation
+from .punishment import Punishment
+from .suspect_crime import SuspectCrime

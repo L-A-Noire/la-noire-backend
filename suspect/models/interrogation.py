@@ -1,24 +1,21 @@
 from django.db import models
+
 from crime.models import Case
 
 
 class Interrogation(models.Model):
     suspect_crime = models.ForeignKey(
-        to="SuspectCrime",
-        on_delete=models.PROTECT,
-        related_name="interrogations"
+        to="SuspectCrime", on_delete=models.PROTECT, related_name="interrogations"
     )
 
     case = models.ForeignKey(
-        to=Case,
-        on_delete=models.PROTECT,
-        related_name="interrogations"
+        to=Case, on_delete=models.PROTECT, related_name="interrogations"
     )
 
     interrogators = models.ManyToManyField(
         to="user.User",
         related_name="conducted_interrogations",
-        help_text="Detective and Sergeant conducting the interrogation"
+        help_text="Detective and Sergeant conducting the interrogation",
     )
 
     date = models.DateTimeField(auto_now_add=True)
@@ -34,7 +31,7 @@ class Interrogation(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="reviewed_interrogations"
+        related_name="reviewed_interrogations",
     )
 
     review_notes = models.TextField(blank=True, null=True)

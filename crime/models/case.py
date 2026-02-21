@@ -3,9 +3,9 @@ from django.db import models
 
 class Case(models.Model):
     crime = models.OneToOneField(
-        to='Crime',
+        to="Crime",
         on_delete=models.PROTECT,
-        related_name='case',
+        related_name="case",
         null=True,
         blank=True,
     )
@@ -19,5 +19,5 @@ class Case(models.Model):
         null=True,
         blank=True,
         related_name="detective_cases",
-        limit_choices_to={'role__title': 'Detective'},
+        limit_choices_to={"role__title": "Detective"},
     )

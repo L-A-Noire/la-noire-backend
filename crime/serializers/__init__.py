@@ -1,13 +1,19 @@
-from .crime_serializers import CrimeSerializer, CrimeDetailSerializer
-from .case_serializers import CaseSerializer, CaseDetailSerializer, CaseListSerializer
+from .case_report_serializers import (
+    CaseReportCreateSerializer,
+    CaseReportDetailSerializer,
+    CaseReportReviewSerializer,
+    CaseReportSerializer,
+)
+from .case_serializers import CaseDetailSerializer, CaseListSerializer, CaseSerializer
 from .complaint_serializers import (
-    ComplaintSerializer, ComplaintCreateSerializer,
-    ComplaintReviewSerializer, ComplaintDetailSerializer
+    ComplaintCreateSerializer,
+    ComplaintDetailSerializer,
+    ComplaintReviewSerializer,
+    ComplaintSerializer,
 )
 from .crime_scene_serializers import (
-    CrimeSceneSerializer, CrimeSceneCreateSerializer, CrimeSceneDetailSerializer
+    CrimeSceneCreateSerializer,
+    CrimeSceneDetailSerializer,
+    CrimeSceneSerializer,
 )
-from .case_report_serializers import (
-    CaseReportSerializer, CaseReportCreateSerializer,
-    CaseReportReviewSerializer, CaseReportDetailSerializer
-)
+from .crime_serializers import CrimeDetailSerializer, CrimeSerializer

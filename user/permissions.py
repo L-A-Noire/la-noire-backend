@@ -7,5 +7,9 @@ class IsAdminUser(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        return bool(request.user and request.user.is_authenticated
-                    and request.user.role and request.user.role.title == 'Administrator')
+        return bool(
+            request.user
+            and request.user.is_authenticated
+            and request.user.role
+            and request.user.role.title == "Administrator"
+        )

@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class DetectiveBoardConfig(AppConfig):
-    name = 'detective_board'
+    name = "detective_board"

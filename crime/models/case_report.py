@@ -21,8 +21,7 @@ class CaseReport(models.Model):
         ("rejected", "rejected state"),
     )
     description = models.TextField(null=True)
-    status = models.CharField(
-        max_length=20, choices=REPORT_STATUS, default="pending")
+    status = models.CharField(max_length=20, choices=REPORT_STATUS, default="pending")
     rejection_reason = models.TextField(blank=True, null=True)
     reviewed_by = models.ForeignKey(
         to="user.User",

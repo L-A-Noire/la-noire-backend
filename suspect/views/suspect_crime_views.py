@@ -1,17 +1,17 @@
-from rest_framework import viewsets, status, generics
-from rest_framework.response import Response
+from django.utils import timezone
+from rest_framework import generics, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
-from django.db.models import Max, Q
-from django.utils import timezone
-from datetime import timedelta
+from rest_framework.response import Response
 
 from suspect.models import SuspectCrime
-from suspect.serializers import (
-    SuspectCrimeSerializer, SuspectCrimeDetailSerializer,
-    SuspectCrimeCreateSerializer, WantedSuspectSerializer
-)
 from suspect.permissions import IsDetective, IsSergeant
+from suspect.serializers import (
+    SuspectCrimeCreateSerializer,
+    SuspectCrimeDetailSerializer,
+    SuspectCrimeSerializer,
+    WantedSuspectSerializer,
+)
 
 
 class SuspectCrimeViewSet(viewsets.ModelViewSet):
@@ -19,9 +19,9 @@ class SuspectCrimeViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
-        if self.action == 'create':
+        if self.action == "create":
             return SuspectCrimeCreateSerializer
-        elif self.action == 'retrieve':
+        elif self.action == "retrieve":
             return SuspectCrimeDetailSerializer
         return SuspectCrimeSerializer
 
@@ -33,23 +33,25 @@ class SuspectCrimeViewSet(viewsets.ModelViewSet):
 
         role = user.role.title
 
-        if role in ['Administrator', 'Chief', 'Captain']:
+        if role in ["Administrator", "Chief", "Captain"]:
             return SuspectCrime.objects.all()
-        elif role == 'Detective':
+        elif role == "Detective":
             return SuspectCrime.objects.filter(case__detective=user)
-        elif role == 'Sergent':
+        elif role == "Sergent":
             return SuspectCrime.objects.filter(
                 case__detective__in=user.detective_cases.all()
             )
-        elif role == 'Judge':
-            return SuspectCrime.objects.filter(status='convicted')
+        elif role == "Judge":
+            return SuspectCrime.objects.filter(status="convicted")
         else:
             return SuspectCrime.objects.none()
 
-    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated, IsDetective])
+    @action(
+        detail=True, methods=["post"], permission_classes=[IsAuthenticated, IsDetective]
+    )
     def mark_wanted(self, request, pk=None):
         suspect_crime = self.get_object()
-        suspect_crime.status = 'most_wanted'
+        suspect_crime.status = "most_wanted"
         suspect_crime.wanted_since = timezone.now()
         time_diff = timezone.now() - suspect_crime.wanted_since
         hours_wanted = time_diff.total_seconds() / 3600
@@ -61,23 +63,29 @@ class SuspectCrimeViewSet(viewsets.ModelViewSet):
         suspect_crime.reward_amount = suspect_crime.priority_score * 20000000
         suspect_crime.save()
 
-        return Response({
-            "message": "Suspect has been added to the Most Wanted list.",
-            "suspect": SuspectCrimeDetailSerializer(suspect_crime).data
-        })
+        return Response(
+            {
+                "message": "Suspect has been added to the Most Wanted list.",
+                "suspect": SuspectCrimeDetailSerializer(suspect_crime).data,
+            }
+        )
 
-    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated, IsSergeant])
+    @action(
+        detail=True, methods=["post"], permission_classes=[IsAuthenticated, IsSergeant]
+    )
     def arrest(self, request, pk=None):
         suspect_crime = self.get_object()
 
-        suspect_crime.status = 'arrested'
+        suspect_crime.status = "arrested"
         suspect_crime.wanted_until = timezone.now()
         suspect_crime.save()
 
-        return Response({
-            "message": "Suspect has been arrested.",
-            "suspect": SuspectCrimeDetailSerializer(suspect_crime).data
-        })
+        return Response(
+            {
+                "message": "Suspect has been arrested.",
+                "suspect": SuspectCrimeDetailSerializer(suspect_crime).data,
+            }
+        )
 
 
 class WantedSuspectsView(generics.ListAPIView):
@@ -86,5 +94,5 @@ class WantedSuspectsView(generics.ListAPIView):
 
     def get_queryset(self):
         return SuspectCrime.objects.filter(
-            status='most_wanted',
-        ).order_by('-priority_score')
+            status="most_wanted",
+        ).order_by("-priority_score")

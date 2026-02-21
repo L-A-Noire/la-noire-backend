@@ -10,59 +10,190 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('crime', '0003_alter_crime_level'),
+        ("crime", "0003_alter_crime_level"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='SuspectCrime',
+            name="SuspectCrime",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('added_at', models.DateTimeField(auto_now_add=True)),
-                ('status', models.CharField(choices=[('suspect', 'Suspect'), ('most_wanted', 'Most Wanted'), ('arrested', 'Arrested'), ('convicted', 'Convicted'), ('innocent', 'Innocent')], default='suspect', max_length=20)),
-                ('wanted_since', models.DateTimeField(blank=True, null=True)),
-                ('wanted_until', models.DateTimeField(blank=True, null=True)),
-                ('priority_score', models.IntegerField(default=0)),
-                ('reward_amount', models.BigIntegerField(default=0)),
-                ('added_by', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='added_suspects', to=settings.AUTH_USER_MODEL)),
-                ('case', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='suspects', to='crime.case')),
-                ('suspect', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='suspected_crimes', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("added_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("suspect", "Suspect"),
+                            ("most_wanted", "Most Wanted"),
+                            ("arrested", "Arrested"),
+                            ("convicted", "Convicted"),
+                            ("innocent", "Innocent"),
+                        ],
+                        default="suspect",
+                        max_length=20,
+                    ),
+                ),
+                ("wanted_since", models.DateTimeField(blank=True, null=True)),
+                ("wanted_until", models.DateTimeField(blank=True, null=True)),
+                ("priority_score", models.IntegerField(default=0)),
+                ("reward_amount", models.BigIntegerField(default=0)),
+                (
+                    "added_by",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="added_suspects",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "case",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="suspects",
+                        to="crime.case",
+                    ),
+                ),
+                (
+                    "suspect",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="suspected_crimes",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Punishment',
+            name="Punishment",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('punishment_type', models.CharField(choices=[('fine', 'Fine'), ('bail', 'Bail'), ('imprisonment', 'Imprisonment'), ('death', 'Death')], max_length=20)),
-                ('title', models.CharField(max_length=200)),
-                ('description', models.TextField()),
-                ('amount', models.DecimalField(blank=True, decimal_places=0, max_digits=12, null=True)),
-                ('is_paid', models.BooleanField(default=False)),
-                ('paid_at', models.DateTimeField(blank=True, null=True)),
-                ('payment_reference', models.CharField(blank=True, max_length=100, null=True)),
-                ('duration_months', models.IntegerField(blank=True, null=True)),
-                ('issued_at', models.DateTimeField(auto_now_add=True)),
-                ('case', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='punishments', to='crime.case')),
-                ('issued_by', models.ForeignKey(help_text='Judge who issued the punishment', on_delete=django.db.models.deletion.PROTECT, related_name='issued_punishments', to=settings.AUTH_USER_MODEL)),
-                ('suspect_crime', models.OneToOneField(on_delete=django.db.models.deletion.PROTECT, related_name='punishment', to='suspect.suspectcrime')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "punishment_type",
+                    models.CharField(
+                        choices=[
+                            ("fine", "Fine"),
+                            ("bail", "Bail"),
+                            ("imprisonment", "Imprisonment"),
+                            ("death", "Death"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                ("title", models.CharField(max_length=200)),
+                ("description", models.TextField()),
+                (
+                    "amount",
+                    models.DecimalField(
+                        blank=True, decimal_places=0, max_digits=12, null=True
+                    ),
+                ),
+                ("is_paid", models.BooleanField(default=False)),
+                ("paid_at", models.DateTimeField(blank=True, null=True)),
+                (
+                    "payment_reference",
+                    models.CharField(blank=True, max_length=100, null=True),
+                ),
+                ("duration_months", models.IntegerField(blank=True, null=True)),
+                ("issued_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "case",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="punishments",
+                        to="crime.case",
+                    ),
+                ),
+                (
+                    "issued_by",
+                    models.ForeignKey(
+                        help_text="Judge who issued the punishment",
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="issued_punishments",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "suspect_crime",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="punishment",
+                        to="suspect.suspectcrime",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Interrogation',
+            name="Interrogation",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateTimeField(auto_now_add=True)),
-                ('location', models.CharField(max_length=500)),
-                ('notes', models.TextField()),
-                ('detective_score', models.IntegerField(blank=True, null=True)),
-                ('sergeant_score', models.IntegerField(blank=True, null=True)),
-                ('final_score', models.IntegerField(blank=True, null=True)),
-                ('review_notes', models.TextField(blank=True, null=True)),
-                ('case', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='interrogations', to='crime.case')),
-                ('interrogators', models.ManyToManyField(help_text='Detective and Sergeant conducting the interrogation', related_name='conducted_interrogations', to=settings.AUTH_USER_MODEL)),
-                ('reviewed_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='reviewed_interrogations', to=settings.AUTH_USER_MODEL)),
-                ('suspect_crime', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='interrogations', to='suspect.suspectcrime')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date", models.DateTimeField(auto_now_add=True)),
+                ("location", models.CharField(max_length=500)),
+                ("notes", models.TextField()),
+                ("detective_score", models.IntegerField(blank=True, null=True)),
+                ("sergeant_score", models.IntegerField(blank=True, null=True)),
+                ("final_score", models.IntegerField(blank=True, null=True)),
+                ("review_notes", models.TextField(blank=True, null=True)),
+                (
+                    "case",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="interrogations",
+                        to="crime.case",
+                    ),
+                ),
+                (
+                    "interrogators",
+                    models.ManyToManyField(
+                        help_text="Detective and Sergeant conducting the interrogation",
+                        related_name="conducted_interrogations",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "reviewed_by",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="reviewed_interrogations",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "suspect_crime",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="interrogations",
+                        to="suspect.suspectcrime",
+                    ),
+                ),
             ],
         ),
     ]

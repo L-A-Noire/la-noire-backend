@@ -4,21 +4,21 @@ from django.db import migrations
 
 
 def add_roles(apps, schema_editor):
-    role_model = apps.get_model('user', 'Role')
+    role_model = apps.get_model("user", "Role")
     role_title = [
-        'Administrator',
-        'Chief',
-        'Captain',
-        'Sergent',
-        'Detective',
-        'Police/Patrol Officer',
-        'Cadet',
-        'Complainant',
-        'Witness',
-        'Suspect',
-        'Judge',
-        'Coronary',
-        'Base User',
+        "Administrator",
+        "Chief",
+        "Captain",
+        "Sergent",
+        "Detective",
+        "Police/Patrol Officer",
+        "Cadet",
+        "Complainant",
+        "Witness",
+        "Suspect",
+        "Judge",
+        "Coronary",
+        "Base User",
     ]
     for title in role_title:
         role_model.objects.create(title=title)
@@ -27,9 +27,7 @@ def add_roles(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user', '0001_initial'),
+        ("user", "0001_initial"),
     ]
 
-    operations = [
-        migrations.RunPython(add_roles)
-    ]
+    operations = [migrations.RunPython(add_roles)]

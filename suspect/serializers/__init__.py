@@ -1,12 +1,17 @@
-from .suspect_crime_serializers import (
-    SuspectCrimeSerializer, SuspectCrimeDetailSerializer,
-    SuspectCrimeCreateSerializer, WantedSuspectSerializer
-)
 from .interrogation_serializers import (
-    InterrogationSerializer, InterrogationDetailSerializer,
-    InterrogationCreateSerializer, ScoreSubmissionSerializer
+    InterrogationCreateSerializer,
+    InterrogationDetailSerializer,
+    InterrogationSerializer,
+    ScoreSubmissionSerializer,
 )
 from .punishment_serializers import (
-    PunishmentSerializer, PunishmentDetailSerializer,
-    PunishmentCreateSerializer
+    PunishmentCreateSerializer,
+    PunishmentDetailSerializer,
+    PunishmentSerializer,
+)
+from .suspect_crime_serializers import (
+    SuspectCrimeCreateSerializer,
+    SuspectCrimeDetailSerializer,
+    SuspectCrimeSerializer,
+    WantedSuspectSerializer,
 )
