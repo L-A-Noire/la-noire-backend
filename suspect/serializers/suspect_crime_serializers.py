@@ -47,7 +47,7 @@ class SuspectCrimeCreateSerializer(serializers.ModelSerializer):
 class WantedSuspectSerializer(serializers.ModelSerializer):
     suspect_details = UserSerializer(source="suspect", read_only=True)
     crime_level = serializers.CharField(source="crime.level", read_only=True)
-
+    crime_title = serializers.CharField(source="crime.title", read_only=True)
     class Meta:
         model = SuspectCrime
         fields = (
