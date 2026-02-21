@@ -15,6 +15,7 @@ class BiologicalEvidence(Evidence):
         on_delete=models.PROTECT,
         null=True,
         blank=True,
+        related_name='coronary_evidence',
     )
 
     result = models.TextField(blank=True, null=True)
