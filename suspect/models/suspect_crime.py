@@ -1,5 +1,46 @@
 from django.db import models
+from crime.models import Case
 
 
 class SuspectCrime(models.Model):
-    pass
+    suspect = models.ForeignKey(
+        to="user.User",
+        on_delete=models.PROTECT,
+        related_name="suspected_crimes"
+    )
+
+    case = models.ForeignKey(
+        to=Case,
+        on_delete=models.PROTECT,
+        related_name="suspects",
+        null=True,
+        blank=True
+    )
+
+    added_at = models.DateTimeField(auto_now_add=True)
+    added_by = models.ForeignKey(
+        to="user.User",
+        on_delete=models.PROTECT,
+        related_name="added_suspects"
+    )
+
+    STATUS_CHOICES = (
+        ("suspect", "Suspect"),
+        ("most_wanted", "Most Wanted"),
+        ("arrested", "Arrested"),
+        ("convicted", "Convicted"),
+        ("innocent", "Innocent"),
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="suspect"
+    )
+
+    wanted_since = models.DateTimeField(null=True, blank=True)
+    wanted_until = models.DateTimeField(null=True, blank=True)
+
+    priority_score = models.IntegerField(default=0)
+
+    reward_amount = models.BigIntegerField(default=0)
