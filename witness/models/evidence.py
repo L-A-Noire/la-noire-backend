@@ -16,6 +16,3 @@ class Evidence(models.Model):
         User,
         on_delete=models.PROTECT,
     )
-
-    class Meta:
-        abstract = True
