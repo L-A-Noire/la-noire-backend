@@ -13,38 +13,26 @@ class ComplaintSerializer(serializers.ModelSerializer):
 
 
 class ComplaintCreateSerializer(serializers.ModelSerializer):
-    complainant_ids = serializers.ListField(
-        child=serializers.IntegerField(), write_only=True, required=True
-    )
 
     class Meta:
         model = Complaint
-        fields = ("description", "complainant_ids")
-
-    def validate_complainant_ids(self, value):
-        if not value:
-            raise serializers.ValidationError(
-                "At least one complainant must be provided."
-            )
-
-        users = User.objects.filter(id__in=value)
-        if len(users) != len(value):
-            raise serializers.ValidationError("Some complainants were not found.")
-
-        return value
+        fields = ("description",)
 
     def create(self, validated_data):
-        complainant_ids = validated_data.pop("complainant_ids")
+        request = self.context["request"]
+        user = request.user
 
-        # Auto assign to first cadet found
         from user.models import User
 
         cadet = User.objects.filter(role__title="Cadet").first()
         if not cadet:
-            raise serializers.ValidationError("No cadet is available in the system.")
+            raise serializers.ValidationError(
+                "No cadet is available in the system."
+            )
 
-        # Auto assign to a police officer
-        officer = User.objects.filter(role__title="Police/Patrol Officer").first()
+        officer = User.objects.filter(
+            role__title="Police/Patrol Officer"
+        ).first()
         if not officer:
             raise serializers.ValidationError(
                 "No police officer is available in the system."
@@ -55,10 +43,10 @@ class ComplaintCreateSerializer(serializers.ModelSerializer):
             cadet=cadet,
             police_officer=officer,
             cadet_rejection_reason="Null",
-            status="pending_cadet"
+            status="pending_cadet",
         )
+        complaint.complainants.add(user)
 
-        complaint.complainants.set(complainant_ids)
         return complaint
 
 
