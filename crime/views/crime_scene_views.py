@@ -29,6 +29,7 @@ class CrimeSceneViewSet(viewsets.ModelViewSet):
             return CrimeScene.objects.none()
 
         if user.role.title in [
+            "Administrator"
             "Police/Patrol Officer",
             "Detective",
             "Captain",
