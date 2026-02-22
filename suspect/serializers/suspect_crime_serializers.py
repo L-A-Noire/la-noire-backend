@@ -58,7 +58,7 @@ class WantedSuspectSerializer(serializers.ModelSerializer):
             "suspect_details",
             "crime_title",
             "crime_level",
-            "crime_level_display"
+            "crime_level_display",
             "status",
             "wanted_since",
             "days_wanted",
