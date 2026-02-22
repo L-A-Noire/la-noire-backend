@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -11,6 +12,8 @@ from crime.serializers import CaseDetailSerializer, CaseListSerializer, CaseSeri
 class CaseViewSet(viewsets.ModelViewSet):
     queryset = Case.objects.all()
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["is_closed"]
 
     def get_serializer_class(self):
         if self.action == "list":
