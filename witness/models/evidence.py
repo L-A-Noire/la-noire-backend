@@ -1,9 +1,16 @@
 from django.db import models
 
+from crime.models import Case
 from user.models import User
 
 
 class Evidence(models.Model):
+    case = models.ForeignKey(
+        Case,
+        on_delete=models.CASCADE,
+        related_name="evidence",
+    )
+
     title = models.CharField(
         max_length=50,
     )
