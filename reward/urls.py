@@ -11,6 +11,7 @@ from reward.views import (
 )
 
 router = DefaultRouter()
+router.include_format_suffixes = False
 router.register(r"reports", ReportViewSet, basename="report")
 router.register(r"rewards", RewardViewSet, basename="reward")
 

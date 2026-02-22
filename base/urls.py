@@ -29,6 +29,8 @@ urlpatterns = [
     path("api/crime/", include("crime.urls")),
     path("api/suspect/", include("suspect.urls")),
     path("api/reward/", include("reward.urls")),
+    path("api/witness/", include("witness.urls")),
+    
     # Swagger URLs
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(

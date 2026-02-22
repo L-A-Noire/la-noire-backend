@@ -11,6 +11,7 @@ from .views import (
 )
 
 router = DefaultRouter()
+router.include_format_suffixes = False
 router.register("attachments", AttachmentViewSet)
 router.register("images", ImageViewSet)
 router.register("biological-evidence", BiologicalEvidenceViewSet)
@@ -19,6 +20,4 @@ router.register("other-evidence", OtherEvidenceViewSet)
 router.register("testimonies", TestimonyViewSet)
 router.register("vehicle-evidence", VehicleEvidenceViewSet)
 
-urlpatterns = [
-    path("", include(router.urls)),
-]
+urlpatterns = router.urls
