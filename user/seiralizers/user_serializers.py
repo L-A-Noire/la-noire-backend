@@ -25,7 +25,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
-    password2 = serializers.CharField(write_only=True, min_length=8)
 
     class Meta:
         model = User
@@ -37,15 +36,9 @@ class RegisterSerializer(serializers.ModelSerializer):
             "last_name",
             "national_id",
             "password",
-            "password2",
         )
 
     def validate(self, data):
-        if data["password"] != data["password2"]:
-            raise serializers.ValidationError(
-                "Password and password confirmation do not match."
-            )
-
         if not any(
             [
                 data.get("username"),
@@ -61,7 +54,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        validated_data.pop("password2")
         password = validated_data.pop("password")
 
         default_role, _ = Role.objects.get_or_create(title="Base User")
