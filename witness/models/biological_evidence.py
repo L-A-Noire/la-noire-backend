@@ -8,6 +8,7 @@ from witness.models.image import Image
 class BiologicalEvidence(Evidence):
     images = models.ManyToManyField(
         Image,
+        related_name="biological_evidence",
     )
 
     coronary = models.ForeignKey(
