@@ -1,6 +1,25 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 from django.core.exceptions import ValidationError
 from django.db import models
+
+from user.models import Role
+
+
+class CustomUserManager(UserManager):
+    def create_superuser(self, username, email=None, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+
+        if not extra_fields.get("is_staff"):
+            raise ValueError("Superuser must have is_staff=True.")
+        if not extra_fields.get("is_superuser"):
+            raise ValueError("Superuser must have is_superuser=True.")
+
+        admin_role = Role.objects.get(title="Administrator")
+
+        extra_fields["role"] = admin_role
+
+        return self.create_user(username, email, password, **extra_fields)
 
 
 class User(AbstractUser):
@@ -51,6 +70,8 @@ class User(AbstractUser):
         to="Role",
         on_delete=models.PROTECT,
     )
+
+    objects = CustomUserManager()
 
     # add constraint for existence of at least one of the identifiers
     def clean(self):
