@@ -95,7 +95,7 @@ class WantedSuspectsView(generics.ListAPIView):
 
         suspects = SuspectCrime.objects.filter(
             status__in=['wanted', 'most_wanted']
-        ).select_related('suspect', 'crime', 'case')
+        ).select_related('suspect', 'case')
 
         for suspect in suspects:
             suspect.update_priority_score()
@@ -105,4 +105,4 @@ class WantedSuspectsView(generics.ListAPIView):
             wanted_since__lte=one_month_ago
         ).order_by("-priority_score")
     
-    
+

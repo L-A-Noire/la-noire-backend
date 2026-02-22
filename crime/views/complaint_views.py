@@ -121,7 +121,17 @@ class ComplaintReviewByOfficerView(generics.UpdateAPIView):
         if is_confirmed:
             complaint.status = "approved"
             complaint.officer_rejection_reason = None
-            message = "Complaint has been approved."
+
+            # ✅ AUTO CREATE CASE
+            if not complaint.case:
+                case = Case.objects.create(
+                    is_from_crime_scene=False,
+                    is_closed=False,
+                )
+
+                complaint.case = case
+
+            message = "Complaint approved and case created automatically."
         else:
             complaint.status = "rejected_by_officer"
             complaint.officer_rejection_reason = rejection_reason
