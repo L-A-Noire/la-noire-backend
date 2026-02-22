@@ -25,7 +25,6 @@ from witness.models import (
     VehicleEvidence,
 )
 
-
 ROLE_TITLES = [
     "Detective",
     "Sergeant",
@@ -99,7 +98,10 @@ class Command(BaseCommand):
                 )
                 scene.witnesses.add(*random.sample(users, k=min(3, len(users))))
 
-            attachments = [self._create_attachment(faker, random.choice(users)) for _ in range(count)]
+            attachments = [
+                self._create_attachment(faker, random.choice(users))
+                for _ in range(count)
+            ]
             images = [self._create_image(random.choice(users)) for _ in range(count)]
 
             evidences = [
@@ -121,7 +123,10 @@ class Command(BaseCommand):
                 for _ in range(count)
             ]
 
-            other = [self._create_other_evidence(faker, random.choice(users)) for _ in range(count)]
+            other = [
+                self._create_other_evidence(faker, random.choice(users))
+                for _ in range(count)
+            ]
 
             testimonies = [
                 self._create_testimony(faker, random.choice(users), attachments)
@@ -134,12 +139,7 @@ class Command(BaseCommand):
             ]
 
             all_evidence = (
-                evidences
-                + biological
-                + identification
-                + other
-                + testimonies
-                + vehicles
+                evidences + biological + identification + other + testimonies + vehicles
             )
 
             for _ in range(count):
@@ -193,7 +193,9 @@ class Command(BaseCommand):
                 )
 
             if detectives and all_evidence:
-                board = DetectiveBoard.objects.create(detective=random.choice(detectives))
+                board = DetectiveBoard.objects.create(
+                    detective=random.choice(detectives)
+                )
                 item1 = BoardItem.objects.create(
                     board=board,
                     evidence=random.choice(all_evidence),
@@ -236,7 +238,9 @@ class Command(BaseCommand):
             title=faker.sentence(nb_words=4),
             description=faker.paragraph(nb_sentences=3),
             level=random.choice(["1", "2", "3", "4"]),
-            committed_at=faker.date_time_this_year(tzinfo=timezone.get_current_timezone()),
+            committed_at=faker.date_time_this_year(
+                tzinfo=timezone.get_current_timezone()
+            ),
             location=faker.address(),
         )
 
@@ -305,7 +309,11 @@ class Command(BaseCommand):
         image = PilImage.new(
             "RGB",
             (200, 200),
-            color=(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)),
+            color=(
+                random.randint(0, 255),
+                random.randint(0, 255),
+                random.randint(0, 255),
+            ),
         )
         image.save(buffer, format="PNG")
         return Image.objects.create(
@@ -362,7 +370,9 @@ class Command(BaseCommand):
             transcription=faker.paragraph(nb_sentences=4),
         )
         if attachments:
-            testimony.attachments.add(*random.sample(attachments, k=min(2, len(attachments))))
+            testimony.attachments.add(
+                *random.sample(attachments, k=min(2, len(attachments)))
+            )
         return testimony
 
     def _create_vehicle_evidence(self, faker, created_by):
@@ -412,8 +422,14 @@ class Command(BaseCommand):
             punishment_type=punishment_type,
             title=faker.sentence(nb_words=4),
             description=faker.paragraph(nb_sentences=2),
-            amount=random.randint(1000, 50000) if punishment_type in ["fine", "bail"] else None,
-            duration_months=random.randint(1, 36) if punishment_type == "imprisonment" else None,
+            amount=(
+                random.randint(1000, 50000)
+                if punishment_type in ["fine", "bail"]
+                else None
+            ),
+            duration_months=(
+                random.randint(1, 36) if punishment_type == "imprisonment" else None
+            ),
             issued_by=issued_by,
         )
 

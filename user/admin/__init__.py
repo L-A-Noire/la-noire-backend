@@ -1,2 +1,7 @@
-from . import role_admin
-from . import user_admin
+from .role_admin import RoleAdmin
+from .user_admin import UserAdmin
+
+__all__ = [
+    "RoleAdmin",
+    "UserAdmin",
+]

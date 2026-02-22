@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from crime.models import Complaint
-from user.models import User
 from user.seiralizers import UserSerializer
 
 
@@ -26,13 +25,9 @@ class ComplaintCreateSerializer(serializers.ModelSerializer):
 
         cadet = User.objects.filter(role__title="Cadet").first()
         if not cadet:
-            raise serializers.ValidationError(
-                "No cadet is available in the system."
-            )
+            raise serializers.ValidationError("No cadet is available in the system.")
 
-        officer = User.objects.filter(
-            role__title="Police/Patrol Officer"
-        ).first()
+        officer = User.objects.filter(role__title="Police/Patrol Officer").first()
         if not officer:
             raise serializers.ValidationError(
                 "No police officer is available in the system."

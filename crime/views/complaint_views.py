@@ -55,7 +55,7 @@ class ComplaintViewSet(viewsets.ModelViewSet):
         )
         serializer.is_valid(raise_exception=True)
         complaint = serializer.save()
-    
+
         return Response(
             ComplaintDetailSerializer(complaint).data,
             status=status.HTTP_201_CREATED,

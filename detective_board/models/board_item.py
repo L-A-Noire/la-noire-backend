@@ -6,11 +6,11 @@ from witness.models import Evidence
 
 class BoardItem(models.Model):
     board = models.ForeignKey(
-        DetectiveBoard, on_delete=models.CASCADE, related_name='items'
+        DetectiveBoard, on_delete=models.CASCADE, related_name="items"
     )
 
     evidence = models.ForeignKey(
-        Evidence, on_delete=models.CASCADE, related_name='items'
+        Evidence, on_delete=models.CASCADE, related_name="items"
     )
 
     x_position = models.FloatField(default=0)

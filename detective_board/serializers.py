@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from .models import DetectiveBoard, BoardItem, BoardConnection
 
-
 # -------------------------
 # Detective Board
 # -------------------------
+
 
 class DetectiveBoardSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,6 +16,7 @@ class DetectiveBoardSerializer(serializers.ModelSerializer):
 # -------------------------
 # Board Item
 # -------------------------
+
 
 class BoardItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,9 +30,7 @@ class BoardItemSerializer(serializers.ModelSerializer):
 
         # Optional: prevent adding same evidence twice to same board
         if BoardItem.objects.filter(board=board, evidence=evidence).exists():
-            raise serializers.ValidationError(
-                "This evidence is already on this board."
-            )
+            raise serializers.ValidationError("This evidence is already on this board.")
 
         return attrs
 
@@ -39,6 +38,7 @@ class BoardItemSerializer(serializers.ModelSerializer):
 # -------------------------
 # Board Connection
 # -------------------------
+
 
 class BoardConnectionSerializer(serializers.ModelSerializer):
     class Meta:
