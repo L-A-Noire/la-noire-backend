@@ -103,11 +103,15 @@ class DetectiveReviewView(generics.UpdateAPIView):
         report.detective = request.user
 
         if is_approved:
-            # TODO: calculate reward amount
-            amount = 1000000
+            if report.suspect and report.suspect.status == 'most_wanted':
+                amount = report.suspect.reward_amount
+            else:
+                amount = 1000000 # default amount
 
             reward = Reward.objects.create(
-                recipient=report.reporter, amount=amount, created_by=request.user
+                recipient=report.reporter,
+                amount=amount,
+                created_by=request.user
             )
 
             report.reward = reward

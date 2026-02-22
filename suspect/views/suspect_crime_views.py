@@ -1,8 +1,13 @@
+from datetime import timedelta
 from django.utils import timezone
 from rest_framework import generics, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+
+from django.db.models import Max, F, Value, IntegerField, OuterRef, Subquery, Sum
+from django.db.models.functions import Coalesce
+from crime.models import Crime
 
 from suspect.models import SuspectCrime
 from suspect.permissions import IsDetective, IsSergeant
@@ -51,22 +56,15 @@ class SuspectCrimeViewSet(viewsets.ModelViewSet):
     )
     def mark_wanted(self, request, pk=None):
         suspect_crime = self.get_object()
-        suspect_crime.status = "most_wanted"
+        suspect_crime.status = "wanted"
         suspect_crime.wanted_since = timezone.now()
-        time_diff = timezone.now() - suspect_crime.wanted_since
-        hours_wanted = time_diff.total_seconds() / 3600
-
-        # TODO: check priority_score value
-        crime_level = int(suspect_crime.crime.level)
-        suspect_crime.priority_score = crime_level * hours_wanted
-
-        suspect_crime.reward_amount = suspect_crime.priority_score * 20000000
-        suspect_crime.save()
+        suspect_crime.update_priority_score()
 
         return Response(
             {
                 "message": "Suspect has been added to the Most Wanted list.",
                 "suspect": SuspectCrimeDetailSerializer(suspect_crime).data,
+                "reward_amount": suspect_crime.reward_amount
             }
         )
 
@@ -93,6 +91,18 @@ class WantedSuspectsView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        one_month_ago = timezone.now() - timedelta(days=30)
+
+        suspects = SuspectCrime.objects.filter(
+            status__in=['wanted', 'most_wanted']
+        ).select_related('suspect', 'crime', 'case')
+
+        for suspect in suspects:
+            suspect.update_priority_score()
+
         return SuspectCrime.objects.filter(
             status="most_wanted",
+            wanted_since__lte=one_month_ago
         ).order_by("-priority_score")
+    
+    

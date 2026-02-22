@@ -1,3 +1,4 @@
+from datetime import timezone
 from django.db import models
 
 from crime.models import Case
@@ -23,6 +24,7 @@ class SuspectCrime(models.Model):
 
     STATUS_CHOICES = (
         ("suspect", "Suspect"),
+        ("wanted", "Wanted"),
         ("most_wanted", "Most Wanted"),
         ("arrested", "Arrested"),
         ("convicted", "Convicted"),
@@ -37,3 +39,35 @@ class SuspectCrime(models.Model):
     priority_score = models.IntegerField(default=0)
 
     reward_amount = models.BigIntegerField(default=0)
+
+    def calculate_days_wanted(self):
+        if not self.wanted_since:
+            return 0
+        
+        end_date = self.wanted_until or timezone.now()
+        delta = end_date - self.wanted_since
+        return delta.days
+    
+    def get_crime_level_value(self):
+        level_map = {
+            "critical": 4,
+            "1": 3,
+            "2": 2,
+            "3": 1
+        }
+        return level_map.get(self.crime.level, 1)
+    
+    def update_priority_score(self):
+        days = self.calculate_days_wanted()
+        level_value = self.get_crime_level_value()
+        
+        self.priority_score = days * level_value
+        self.reward_amount = self.priority_score * 20000000
+        
+        if days >= 30 and self.status == "wanted":
+            self.status = "most_wanted"
+        
+        self.save()
+    
+    def __str__(self):
+        return f"{self.suspect.get_full_name()} - {self.crime.title}"
