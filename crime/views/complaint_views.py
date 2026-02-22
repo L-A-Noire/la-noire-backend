@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -17,6 +18,8 @@ from crime.serializers import (
 class ComplaintViewSet(viewsets.ModelViewSet):
     queryset = Complaint.objects.all()
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["is_closed"]
 
     def get_serializer_class(self):
         if self.action == "create":
