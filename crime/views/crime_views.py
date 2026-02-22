@@ -24,6 +24,7 @@ class CrimeViewSet(viewsets.ModelViewSet):
         user = self.request.user
         if user.role and user.role.title in [
             "Administrator",
+            "Police/Patrol Officer",
             "Chief",
             "Captain",
             "Detective",
