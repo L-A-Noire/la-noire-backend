@@ -130,6 +130,7 @@ class ComplaintReviewByOfficerView(generics.UpdateAPIView):
                 )
 
                 complaint.case = case
+                complaint.save()
 
             message = "Complaint approved and case created automatically."
         else:
