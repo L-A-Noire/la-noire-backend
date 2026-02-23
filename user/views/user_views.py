@@ -2,6 +2,7 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import AllowAny
 
 from user.models import User
 from user.seiralizers import LoginSerializer, RegisterSerializer, UserSerializer
@@ -59,8 +60,10 @@ class UserDetailView(generics.RetrieveUpdateAPIView):
 
 
 class EmployeesCountView(APIView):
+    permission_classes = [AllowAny]
+    
     def get(self, request):
-        return User.objects.exclude(
+        count = User.objects.exclude(
             role__title__in=[
                 "Complainant",
                 "Witness",
@@ -68,3 +71,5 @@ class EmployeesCountView(APIView):
                 "Base User",
             ]
         ).distinct().count()
+        
+        return Response({"totalEmployees": count})
