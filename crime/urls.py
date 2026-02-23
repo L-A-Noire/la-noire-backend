@@ -1,6 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
+from crime.views.case_count_views import CasesCountAPIView
 from crime.views.case_report_views import CaseReportReviewView, CaseReportViewSet
 from crime.views.case_views import CaseViewSet
 from crime.views.complaint_views import (
@@ -44,4 +45,9 @@ urlpatterns = [
         CaseReportReviewView.as_view(),
         name="case-report-review",
     ),
+    path(
+        "cases-count/",
+        CasesCountAPIView.as_view(),
+        name="cases-count",
+    )
 ]
