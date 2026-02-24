@@ -37,7 +37,7 @@ class ComplaintViewSet(viewsets.ModelViewSet):
             return Complaint.objects.all()
         elif role_title == "Cadet":
             return Complaint.objects.filter(
-                status__in=["pending_cadet", "rejected_by_cadet"], cadet=user
+                status__in=["pending_cadet", "rejected_by_officer"], cadet=user
             )
         elif role_title == "Police/Patrol Officer":
             return Complaint.objects.filter(
@@ -60,10 +60,25 @@ class ComplaintViewSet(viewsets.ModelViewSet):
             ComplaintDetailSerializer(complaint).data,
             status=status.HTTP_201_CREATED,
         )
+    
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        
+        if instance.status == "rejected_by_cadet":
+            instance.status = "pending_cadet"
+            instance.cadet_rejection_reason = "Null"
+        
+        self.perform_update(serializer)
+        
+        return Response(serializer.data)
 
 
 class ComplaintReviewByCadetView(generics.UpdateAPIView):
-    queryset = Complaint.objects.filter(status="pending_cadet")
+    queryset = Complaint.objects.filter(status__in=["pending_cadet", "rejected_by_officer"])
     serializer_class = ComplaintReviewSerializer
     permission_classes = [IsAuthenticated, IsCadet]
 
@@ -136,6 +151,15 @@ class ComplaintReviewByOfficerView(generics.UpdateAPIView):
         else:
             complaint.status = "rejected_by_officer"
             complaint.officer_rejection_reason = rejection_reason
+            complaint.rejection_count += 1
+
+            if complaint.rejection_count >= 3:
+                complaint.status = "invalid"
+                message = (
+                    "The complaint has been marked as invalid after three rejections."
+                )
+            else:
+                message = "The complaint was rejected and returned to the complainant."
 
             from user.models import User
 
@@ -146,7 +170,6 @@ class ComplaintReviewByOfficerView(generics.UpdateAPIView):
             )
             if new_cadet:
                 complaint.cadet = new_cadet
-                complaint.status = "pending_cadet"
                 message = (
                     "Complaint rejected by officer and reassigned to another cadet."
                 )

@@ -38,6 +38,9 @@ class SuspectCrimeCreateSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
+        request = self.context["request"]
+
+        validated_data["added_by"] = request.user
         if validated_data.get("status") in ["wanted","most_wanted"]:
             validated_data["wanted_since"] = validated_data.get("wanted_since", None)
 
