@@ -77,3 +77,7 @@ class VehicleEvidenceSerializer(serializers.ModelSerializer):
             )
 
         return attrs
+
+
+class CrimeLevelSerializer(serializers.Serializer):
+    crime_level = serializers.IntegerField()

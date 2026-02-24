@@ -10,3 +10,5 @@ class Testimony(Evidence):
     attachments = models.ManyToManyField(
         Attachment,
     )
+
+    is_confirmed = models.BooleanField(default=False)
