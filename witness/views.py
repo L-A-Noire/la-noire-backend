@@ -41,15 +41,24 @@ class BiologicalEvidenceViewSet(viewsets.ModelViewSet):
     queryset = BiologicalEvidence.objects.all()
     serializer_class = BiologicalEvidenceSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
 
 class IdentificationEvidenceViewSet(viewsets.ModelViewSet):
     queryset = IdentificationEvidence.objects.all()
     serializer_class = IdentificationEvidenceSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
 
 class OtherEvidenceViewSet(viewsets.ModelViewSet):
     queryset = OtherEvidence.objects.all()
     serializer_class = OtherEvidenceSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
 
 
 class TestimonyViewSet(viewsets.ModelViewSet):
@@ -59,6 +68,9 @@ class TestimonyViewSet(viewsets.ModelViewSet):
         if self.action == 'confirm':
             return CrimeLevelSerializer
         return TestimonySerializer
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
 
     @action(detail=True, methods=['POST'])
     def confirm(self, request, pk):
@@ -93,6 +105,9 @@ class TestimonyViewSet(viewsets.ModelViewSet):
 class VehicleEvidenceViewSet(viewsets.ModelViewSet):
     queryset = VehicleEvidence.objects.all()
     serializer_class = VehicleEvidenceSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
 
 
 class EvidenceListViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
