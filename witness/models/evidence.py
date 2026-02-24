@@ -17,9 +17,11 @@ class Evidence(models.Model):
 
     description = models.TextField()
 
-    created_at = models.DateTimeField()
+    seen_at = models.DateTimeField()
 
     created_by = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
     )
+
+    location = models.CharField(max_length=200)
