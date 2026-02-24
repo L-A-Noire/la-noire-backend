@@ -2,14 +2,8 @@ from django.db import models
 
 
 class CrimeScene(models.Model):
-    viewer = models.ForeignKey(
-        "user.User",
-        on_delete=models.PROTECT,
-        related_name="viewed_scenes",
-    )
-
-    case_report = models.ForeignKey(
-        to="CaseReport",
+    crime = models.OneToOneField(
+        to="Crime",
         on_delete=models.PROTECT,
         related_name="crime_scenes",
         null=True,
