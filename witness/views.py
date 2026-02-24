@@ -97,5 +97,6 @@ class VehicleEvidenceViewSet(viewsets.ModelViewSet):
 
 class EvidenceListViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     queryset = Evidence.objects.all()
+    serializer_class = EvidenceSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['case']
