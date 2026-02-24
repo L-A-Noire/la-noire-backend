@@ -18,7 +18,7 @@ class CrimeScene(models.Model):
         blank=True,
     )
 
-    is_confirmed = models.BooleanField()
+    is_confirmed = models.BooleanField(default=False)
 
     seen_at = models.DateTimeField()
 
