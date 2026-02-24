@@ -235,13 +235,7 @@ class Command(BaseCommand):
 
     def _create_crime(self, faker):
         return Crime.objects.create(
-            title=faker.sentence(nb_words=4),
-            description=faker.paragraph(nb_sentences=3),
             level=random.choice(["1", "2", "3", "4"]),
-            committed_at=faker.date_time_this_year(
-                tzinfo=timezone.get_current_timezone()
-            ),
-            location=faker.address(),
         )
 
     def _create_case(self, crime, detective):

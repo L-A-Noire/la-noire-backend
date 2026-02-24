@@ -198,12 +198,7 @@ class ComplaintCreateCaseView(generics.CreateAPIView):
             )
 
         crime_data = {
-            "title": f"Complaint: {complaint.description[:50]}",
-            "description": complaint.description,
             "level": "1",
-            "committed_at": complaint.created_at,
-            "location": "To be determined",
-            "reported_by": request.user.id,
         }
 
         crime_serializer = CrimeSerializer(data=crime_data)
