@@ -19,6 +19,8 @@ class Evidence(models.Model):
 
     seen_at = models.DateTimeField()
 
+    created_at = models.DateTimeField(auto_now_add=True)
+
     created_by = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
