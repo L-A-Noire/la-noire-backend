@@ -18,7 +18,7 @@ class CrimeSceneCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CrimeScene
-        fields = ("viewer", "location", "description", "seen_at", "witness_ids")
+        fields = ("location", "description", "seen_at", "witness_ids")
 
     def create(self, validated_data):
         witness_ids = validated_data.pop("witness_ids", [])
