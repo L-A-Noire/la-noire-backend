@@ -1,4 +1,7 @@
-from rest_framework import viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets, mixins
+from rest_framework.generics import ListAPIView
+
 from .models import (
     Attachment,
     BiologicalEvidence,
@@ -6,7 +9,7 @@ from .models import (
     Image,
     OtherEvidence,
     Testimony,
-    VehicleEvidence,
+    VehicleEvidence, Evidence,
 )
 from .serializers import (
     AttachmentSerializer,
@@ -52,3 +55,9 @@ class TestimonyViewSet(viewsets.ModelViewSet):
 class VehicleEvidenceViewSet(viewsets.ModelViewSet):
     queryset = VehicleEvidence.objects.all()
     serializer_class = VehicleEvidenceSerializer
+
+
+class EvidenceListViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+    queryset = Evidence.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['case']
