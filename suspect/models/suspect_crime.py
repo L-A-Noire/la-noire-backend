@@ -55,7 +55,7 @@ class SuspectCrime(models.Model):
             "2": 2,
             "3": 1
         }
-        return level_map.get(self.crime.level, 1)
+        return level_map.get(self.case.crime.level, 1)
     
     def update_priority_score(self):
         days = self.calculate_days_wanted()
@@ -68,6 +68,3 @@ class SuspectCrime(models.Model):
             self.status = "most_wanted"
         
         self.save()
-    
-    def __str__(self):
-        return f"{self.suspect.get_full_name()} - {self.crime.title}"

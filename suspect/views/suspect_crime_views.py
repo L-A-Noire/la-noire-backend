@@ -91,18 +91,14 @@ class WantedSuspectsView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        one_month_ago = timezone.now() - timedelta(days=30)
-
         suspects = SuspectCrime.objects.filter(
             status__in=['wanted', 'most_wanted']
-        ).select_related('suspect', 'case')
+        ).select_related('suspect', 'case', 'case__crime')
 
         for suspect in suspects:
             suspect.update_priority_score()
 
-        return SuspectCrime.objects.filter(
-            status="most_wanted",
-            wanted_since__lte=one_month_ago
-        ).order_by("-priority_score")
-    
 
+        return SuspectCrime.objects.filter(
+            status__in=['wanted', 'most_wanted']
+        ).select_related('suspect', 'case', 'case__crime').order_by("-priority_score")
