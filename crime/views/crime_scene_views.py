@@ -45,42 +45,6 @@ class CrimeSceneViewSet(viewsets.ModelViewSet):
         else:
             return CrimeScene.objects.none()
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        crime_scene = serializer.save()
-
-        case = Case.objects.create(is_from_crime_scene=True, is_closed=False)
-
-        case_report_data = {
-            "reporter": request.user.id,
-            "case": case.id,
-            "description": f"Crime scene at {crime_scene.location}",
-        }
-
-        case_report_serializer = CaseReportCreateSerializer(data=case_report_data)
-        if case_report_serializer.is_valid():
-            case_report = case_report_serializer.save()
-
-            crime_scene.case_report = case_report
-            crime_scene.save()
-
-            return Response(
-                {
-                    "message": "Crime scene registered successfully and an initial report was created.",
-                    "crime_scene": CrimeSceneDetailSerializer(crime_scene).data,
-                    "case_id": case.id,
-                    "case_report_id": case_report.id,
-                },
-                status=status.HTTP_201_CREATED,
-            )
-        else:
-            # If case report creation fails delete the crime scene
-            crime_scene.delete()
-            return Response(
-                case_report_serializer.errors, status=status.HTTP_400_BAD_REQUEST
-            )
-
     @action(detail=True, methods=["POST"])
     def confirm(self, request):
         crime_scene = self.get_object()
