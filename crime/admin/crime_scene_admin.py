@@ -7,9 +7,8 @@ class CrimeSceneAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "location",
-        "viewer",
+        "witness",
         "examiner",
-        "case_report",
         "is_confirmed",
         "seen_at",
     )
@@ -20,6 +19,6 @@ class CrimeSceneAdmin(admin.ModelAdmin):
     search_fields = (
         "location",
         "description",
-        "viewer__username",
+        "witness__username",
         "examiner__username",
     )

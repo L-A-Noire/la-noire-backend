@@ -24,9 +24,12 @@ class CrimeScene(models.Model):
 
     seen_at = models.DateTimeField()
 
-    witnesses = models.ManyToManyField(
+    witness = models.ForeignKey(
         to="user.User",
+        on_delete=models.PROTECT,
         related_name="witnessed_scenes",
+        null=True,
+        blank=True,
     )
 
     location = models.CharField(max_length=500, null=True)
