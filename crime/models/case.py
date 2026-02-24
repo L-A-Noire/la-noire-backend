@@ -1,4 +1,10 @@
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Count
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+
+from user.models import User
 
 
 class Case(models.Model):
@@ -21,3 +27,17 @@ class Case(models.Model):
         related_name="detective_cases",
         limit_choices_to={"role__title": "Detective"},
     )
+
+
+@receiver(pre_save, sender=Case)
+def assign_detective(sender, instance, **kwargs):
+    if instance.detective:
+        return
+    detectives = (
+        User.objects.filter(role__title="Detective")
+        .annotate(case_count=Count("detective_cases"))
+        .order_by("case_count")
+    )
+    if not detectives:
+        raise ValidationError("No detectives available at the moment.")
+    instance.detective = detectives.first()
