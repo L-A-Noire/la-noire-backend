@@ -1,5 +1,7 @@
 from django.db import models
 
+from crime.models import Crime, Case
+
 
 class CrimeScene(models.Model):
     crime = models.OneToOneField(
@@ -29,3 +31,12 @@ class CrimeScene(models.Model):
 
     location = models.CharField(max_length=500, null=True)
     description = models.TextField(null=True)
+
+    def create_case(self, crime_level):
+        crime = Crime.objects.create(
+            crime_level
+        )
+        Case.objects.create(
+            crime=crime,
+            is_from_crime_scene=True,
+        )
