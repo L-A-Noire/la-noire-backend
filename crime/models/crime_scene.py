@@ -43,3 +43,5 @@ class CrimeScene(models.Model):
             crime=crime,
             is_from_crime_scene=True,
         )
+        self.crime = crime
+        self.save()

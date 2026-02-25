@@ -66,6 +66,7 @@ class CrimeSceneViewSet(viewsets.ModelViewSet):
             or request.user.role.title == "Detective" and crime_scene.examiner.role.title
             == "Police/Patrol Officer"
         ):
+            crime_scene.is_confirmed = True
             crime_scene.create_case(crime_level=crime_level)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
