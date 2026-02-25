@@ -53,17 +53,17 @@ class CrimeSceneViewSet(viewsets.ModelViewSet):
         crime_level = serializer.validated_data["crime_level"]
 
         if (
-            request.user.role == "Chief"
-            or request.user.role == "Captain" and crime_scene.examiner.role in [
+            request.user.role.title == "Chief"
+            or request.user.role.title == "Captain" and crime_scene.examiner.role.title in [
                 "Sergent",
                 "Detective",
                 "Police/Patrol Officer",
             ]
-            or request.user.role == "Sergent" and crime_scene.examiner.role in[
+            or request.user.role.title == "Sergent" and crime_scene.examiner.role.title in [
                 "Detective",
                 "Police/Patrol Officer",
             ]
-            or request.user.role == "Detective" and crime_scene.examiner.role
+            or request.user.role.title == "Detective" and crime_scene.examiner.role.title
             == "Police/Patrol Officer"
         ):
             crime_scene.create_case(crime_level=crime_level)
