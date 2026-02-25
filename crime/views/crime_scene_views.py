@@ -46,7 +46,7 @@ class CrimeSceneViewSet(viewsets.ModelViewSet):
             return CrimeScene.objects.none()
 
     @action(detail=True, methods=["POST"])
-    def confirm(self, request):
+    def confirm(self, request, pk):
         crime_scene = self.get_object()
         serializer = CrimeLevelSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
