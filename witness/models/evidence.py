@@ -9,6 +9,8 @@ class Evidence(models.Model):
         Case,
         on_delete=models.CASCADE,
         related_name="evidence",
+        null=True,
+        blank=True,
     )
 
     title = models.CharField(
