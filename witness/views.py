@@ -74,7 +74,7 @@ class TestimonyViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST'])
     def confirm(self, request, pk):
-        if request.user.role not in [
+        if request.user.role.title not in [
             "Chief",
             "Captain",
             "Sergent",
