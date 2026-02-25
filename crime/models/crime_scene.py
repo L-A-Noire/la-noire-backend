@@ -37,7 +37,7 @@ class CrimeScene(models.Model):
 
     def create_case(self, crime_level):
         crime = Crime.objects.create(
-            crime_level
+            level=crime_level
         )
         Case.objects.create(
             crime=crime,
