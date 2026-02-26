@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.db import models
 from django.db.models import Max
 from django.utils import timezone
@@ -83,9 +85,15 @@ class Suspect(models.Model):
         self.priority_score = days * level_value
         self.reward_amount = self.priority_score * 20000000
 
-        if days >= 30 and self.status == "wanted":
+    def mark_as_most_wanted_if_necessary(self):
+        if (
+                self.status == "wanted"
+                and self.wanted_since.date()
+                < timezone.now() - timedelta(days=30)
+        ):
             self.status = "most_wanted"
 
     def save(self, *args, **kwargs):
         self.update_priority_score()
+        self.mark_as_most_wanted_if_necessary()
         super().save(*args, **kwargs)

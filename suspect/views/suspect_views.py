@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
@@ -9,12 +11,16 @@ from suspect.serializers.suspect_serializers import SuspectSerializer
 
 
 class SuspectModelViewSet(viewsets.ModelViewSet):
-    queryset = Suspect.objects.all()
     serializer_class = SuspectSerializer
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = {
         "status": ["exact", "in"],
     }
+
+    def get_queryset(self):
+        for suspect in Suspect.objects.all():
+            suspect.save()
+        return Suspect.objects.all()
 
     def perform_create(self, serializer):
         if self.request.user.role.title != "Detective":
