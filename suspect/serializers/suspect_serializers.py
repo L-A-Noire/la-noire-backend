@@ -11,4 +11,5 @@ class SuspectSerializer(serializers.ModelSerializer):
             "created_at",
             "priority_score",
             "reward_amount",
+            "wanted_since",
         ]

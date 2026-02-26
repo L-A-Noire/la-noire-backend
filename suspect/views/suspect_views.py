@@ -22,13 +22,13 @@ class SuspectModelViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         if self.request.user.role.title != "Detective":
-            return PermissionDenied(detail="You can't create suspects")
+            raise PermissionDenied(detail="You can't create suspects")
         super().perform_create(serializer)
 
     @action(detail=True, methods=["post"])
     def mark_as_wanted(self, request, pk=None):
         if request.user.role.title != "Sergent":
-            return PermissionDenied(detail="You can't mark as wanted")
+            raise PermissionDenied(detail="You can't mark as wanted")
         suspect = self.get_object()
         if suspect.status in [
             "suspected",
