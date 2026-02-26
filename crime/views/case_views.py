@@ -30,12 +30,10 @@ class CaseViewSet(viewsets.ModelViewSet):
 
         role = user.role.title
 
-        if role in ["Administrator", "Chief", "Captain"]:
+        if role in ["Administrator", "Chief", "Captain", "Sergent"]:
             return Case.objects.all()
         elif role == "Detective":
             return Case.objects.filter(detective=user)
-        elif role == "Sergent":
-            return Case.objects.filter(detective__in=user.detective_cases.all())
         elif role in ["Police/Patrol Officer", "Cadet"]:
             return Case.objects.filter(case_report__reporter=user)
         else:
