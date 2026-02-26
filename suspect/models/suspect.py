@@ -75,9 +75,11 @@ class Suspect(models.Model):
 
     def update_priority_score(self):
         days = self.calculate_days_wanted()
-        level_value = self.suspected_crimes.all().aggregate(
-            max_level=Max("crime__level")
-        ).get("max_level", None)
+        level_value = (
+            self.suspected_crimes.all()
+            .aggregate(max_level=Max("crime__level"))
+            .get("max_level", None)
+        )
         if level_value is None:
             return
         self.priority_score = days * level_value
