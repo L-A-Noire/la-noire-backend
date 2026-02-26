@@ -10,9 +10,7 @@ class SuspectCrimeAdmin(admin.ModelAdmin):
         "crime",
         "added_at",
     )
-    list_filter = (
-        "added_at",
-    )
+    list_filter = ("added_at",)
     search_fields = (
         "suspect__username",
         "crime__id",

@@ -45,9 +45,7 @@ class CrimeScene(models.Model):
     description = models.TextField(null=True)
 
     def create_case(self, crime_level):
-        crime = Crime.objects.create(
-            level=crime_level
-        )
+        crime = Crime.objects.create(level=crime_level)
         case = Case.objects.create(
             crime=crime,
             is_from_crime_scene=True,

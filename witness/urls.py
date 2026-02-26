@@ -6,7 +6,8 @@ from .views import (
     ImageViewSet,
     OtherEvidenceViewSet,
     TestimonyViewSet,
-    VehicleEvidenceViewSet, EvidenceListViewSet,
+    VehicleEvidenceViewSet,
+    EvidenceListViewSet,
 )
 
 router = DefaultRouter()

@@ -60,16 +60,20 @@ class UserDetailView(generics.RetrieveUpdateAPIView):
 
 
 class EmployeesCountView(APIView):
-    permission_classes = [AllowAny] 
-    
+    permission_classes = [AllowAny]
+
     def get(self, request):
-        count = User.objects.exclude(
-            role__title__in=[
-                "Complainant",
-                "Witness",
-                "Suspect",
-                "Base User",
-            ]
-        ).distinct().count()
-        
+        count = (
+            User.objects.exclude(
+                role__title__in=[
+                    "Complainant",
+                    "Witness",
+                    "Suspect",
+                    "Base User",
+                ]
+            )
+            .distinct()
+            .count()
+        )
+
         return Response({"totalEmployees": count})

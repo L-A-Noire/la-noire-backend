@@ -3,9 +3,8 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from crime.models import Case, CrimeScene
+from crime.models import CrimeScene
 from crime.serializers import (
-    CaseReportCreateSerializer,
     CrimeSceneCreateSerializer,
     CrimeSceneDetailSerializer,
     CrimeSceneSerializer,
@@ -54,17 +53,21 @@ class CrimeSceneViewSet(viewsets.ModelViewSet):
 
         if (
             request.user.role.title == "Chief"
-            or request.user.role.title == "Captain" and crime_scene.examiner.role.title in [
+            or request.user.role.title == "Captain"
+            and crime_scene.examiner.role.title
+            in [
                 "Sergent",
                 "Detective",
                 "Police/Patrol Officer",
             ]
-            or request.user.role.title == "Sergent" and crime_scene.examiner.role.title in [
+            or request.user.role.title == "Sergent"
+            and crime_scene.examiner.role.title
+            in [
                 "Detective",
                 "Police/Patrol Officer",
             ]
-            or request.user.role.title == "Detective" and crime_scene.examiner.role.title
-            == "Police/Patrol Officer"
+            or request.user.role.title == "Detective"
+            and crime_scene.examiner.role.title == "Police/Patrol Officer"
         ):
             crime_scene.is_confirmed = True
             crime_scene.create_case(crime_level=crime_level)

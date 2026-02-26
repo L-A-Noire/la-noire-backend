@@ -49,5 +49,5 @@ urlpatterns = [
         "cases-count/",
         CasesCountAPIView.as_view(),
         name="cases-count",
-    )
+    ),
 ]

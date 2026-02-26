@@ -9,8 +9,8 @@ from user.models import User
 
 class Suspect(models.Model):
     GENDER_CHOICES = (
-        ('m', 'Male'),
-        ('f', 'Female'),
+        ("m", "Male"),
+        ("f", "Female"),
     )
 
     description = models.TextField()
@@ -18,7 +18,7 @@ class Suspect(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        related_name='suspect',
+        related_name="suspect",
         null=True,
         blank=True,
     )
@@ -28,14 +28,11 @@ class Suspect(models.Model):
     nickname = models.CharField(max_length=100)
 
     gender = models.CharField(
-        max_length=100,
-        choices=GENDER_CHOICES,
-        null=True,
-        blank=True
+        max_length=100, choices=GENDER_CHOICES, null=True, blank=True
     )
 
     picture = models.ImageField(
-        upload_to='suspect',
+        upload_to="suspect",
         null=True,
         blank=True,
     )
@@ -87,9 +84,8 @@ class Suspect(models.Model):
 
     def mark_as_most_wanted_if_necessary(self):
         if (
-                self.status == "wanted"
-                and self.wanted_since.date()
-                < timezone.now() - timedelta(days=30)
+            self.status == "wanted"
+            and self.wanted_since.date() < timezone.now() - timedelta(days=30)
         ):
             self.status = "most_wanted"
 

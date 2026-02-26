@@ -12,7 +12,8 @@ from .models import (
     Image,
     OtherEvidence,
     Testimony,
-    VehicleEvidence, Evidence,
+    VehicleEvidence,
+    Evidence,
 )
 from .serializers import (
     AttachmentSerializer,
@@ -65,14 +66,14 @@ class TestimonyViewSet(viewsets.ModelViewSet):
     queryset = Testimony.objects.all()
 
     def get_serializer_class(self):
-        if self.action == 'confirm':
+        if self.action == "confirm":
             return CrimeLevelSerializer
         return TestimonySerializer
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
-    @action(detail=True, methods=['POST'])
+    @action(detail=True, methods=["POST"])
     def confirm(self, request, pk):
         if request.user.role.title not in [
             "Chief",
@@ -114,4 +115,4 @@ class EvidenceListViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     queryset = Evidence.objects.all()
     serializer_class = EvidenceSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['case']
+    filterset_fields = ["case"]

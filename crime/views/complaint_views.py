@@ -60,25 +60,27 @@ class ComplaintViewSet(viewsets.ModelViewSet):
             ComplaintDetailSerializer(complaint).data,
             status=status.HTTP_201_CREATED,
         )
-    
+
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
+        partial = kwargs.pop("partial", False)
         instance = self.get_object()
-        
+
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
-        
+
         if instance.status == "rejected_by_cadet":
             instance.status = "pending_cadet"
             instance.cadet_rejection_reason = "Null"
-        
+
         self.perform_update(serializer)
-        
+
         return Response(serializer.data)
 
 
 class ComplaintReviewByCadetView(generics.UpdateAPIView):
-    queryset = Complaint.objects.filter(status__in=["pending_cadet", "rejected_by_officer"])
+    queryset = Complaint.objects.filter(
+        status__in=["pending_cadet", "rejected_by_officer"]
+    )
     serializer_class = ComplaintReviewSerializer
     permission_classes = [IsAuthenticated, IsCadet]
 
