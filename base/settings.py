@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "suspect",
     "user",
     "witness",
+    "payment",
 ]
 
 MIDDLEWARE = [
@@ -190,3 +191,6 @@ AUTH_USER_MODEL = "user.User"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+BITPAY_API_KEY = os.getenv("BITPAY_API_KEY", "")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
