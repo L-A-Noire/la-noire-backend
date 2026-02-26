@@ -16,6 +16,7 @@ router.register(r"reports", ReportViewSet, basename="report")
 router.register(r"rewards", RewardViewSet, basename="reward")
 
 urlpatterns = [
+    path("rewards/claim/", ClaimRewardAPIView.as_view(), name="reward-claim"),
     path("", include(router.urls)),
     # Review endpoints
     path(
@@ -28,5 +29,4 @@ urlpatterns = [
         DetectiveReviewView.as_view(),
         name="report-review-detective",
     ),
-    path("rewards/claim/", ClaimRewardAPIView.as_view(), name="reward-claim"),
 ]
