@@ -26,7 +26,10 @@ class SuspectModelViewSet(viewsets.ModelViewSet):
         if request.user.role.title != "Sergent":
             return PermissionDenied(detail="You can't mark as wanted")
         suspect = self.get_object()
-        if suspect.status == "suspected":
+        if suspect.status in [
+            "suspected",
+            "innocent",
+        ]:
             suspect.status = "wanted"
             suspect.wanted_since = timezone.now()
             suspect.save()
