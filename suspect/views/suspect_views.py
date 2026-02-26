@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -27,4 +28,5 @@ class SuspectModelViewSet(viewsets.ModelViewSet):
         suspect = self.get_object()
         if suspect.status == "suspected":
             suspect.status = "wanted"
+            suspect.wanted_since = timezone.now()
             suspect.save()

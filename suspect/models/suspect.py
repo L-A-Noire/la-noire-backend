@@ -6,10 +6,39 @@ from user.models import User
 
 
 class Suspect(models.Model):
+    GENDER_CHOICES = (
+        ('m', 'Male'),
+        ('f', 'Female'),
+    )
+
+    description = models.TextField()
+
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         related_name='suspect',
+        null=True,
+        blank=True,
+    )
+
+    name = models.CharField(max_length=100)
+
+    nickname = models.CharField(max_length=100)
+
+    gender = models.CharField(
+        max_length=100,
+        choices=GENDER_CHOICES,
+        null=True,
+        blank=True
+    )
+
+    picture = models.ImageField(
+        upload_to='suspect',
+        null=True,
+        blank=True,
+    )
+
+    national_id = models.IntegerField(
         null=True,
         blank=True,
     )
