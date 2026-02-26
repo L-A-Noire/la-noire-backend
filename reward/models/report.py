@@ -1,6 +1,6 @@
 from django.db import models
 from crime.models import Case
-from suspect.models import SuspectCrime
+from suspect.models.suspect import Suspect
 
 
 class Report(models.Model):
@@ -13,7 +13,7 @@ class Report(models.Model):
     )
 
     suspect = models.ForeignKey(
-        SuspectCrime,
+        Suspect,
         on_delete=models.CASCADE,
         null=True,
         blank=True,
