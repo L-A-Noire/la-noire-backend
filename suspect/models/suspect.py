@@ -88,7 +88,7 @@ class Suspect(models.Model):
     def mark_as_most_wanted_if_necessary(self):
         if (
             self.status == "wanted"
-            and self.wanted_since.date() < timezone.now() - timedelta(days=30)
+            and self.wanted_since.date() < (timezone.now() - timedelta(days=30)).date()
         ):
             self.status = "most_wanted"
 
