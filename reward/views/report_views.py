@@ -103,8 +103,9 @@ class DetectiveReviewView(generics.UpdateAPIView):
         report.detective = request.user
 
         if is_approved:
-            if report.suspect and report.suspect.status == "most_wanted":
-                amount = report.suspect.reward_amount
+            suspect_person = report.suspect
+            if suspect_person and suspect_person.status == "most_wanted":
+                amount = suspect_person.reward_amount
             else:
                 amount = 1000000  # default amount
 
