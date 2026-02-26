@@ -13,6 +13,7 @@ class SuspectModelViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = {
         "status": ["exact", "in"],
+        "suspected_crimes__crime__case__id": ["exact"],
     }
 
     def get_queryset(self):
