@@ -6,7 +6,9 @@ from crime.serializers import CaseSerializer
 
 
 class ReportSerializer(serializers.ModelSerializer):
-    suspect = SuspectSerializer(read_only=True)
+    suspect = SuspectSerializer(
+        source="suspect.suspect", read_only=True, allow_null=True
+    )
 
     class Meta:
         model = Report
@@ -42,7 +44,9 @@ class ReportDetailSerializer(serializers.ModelSerializer):
     officer_details = UserSerializer(source="officer", read_only=True)
     detective_details = UserSerializer(source="detective", read_only=True)
     case_details = CaseSerializer(source="case", read_only=True)
-    suspect_details = SuspectSerializer(source="suspect", read_only=True)
+    suspect_details = SuspectSerializer(
+        source="suspect.suspect", read_only=True, allow_null=True
+    )
     status_display = serializers.CharField(source="get_status_display", read_only=True)
 
     class Meta:
