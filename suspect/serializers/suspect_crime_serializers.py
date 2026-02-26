@@ -26,11 +26,11 @@ class SuspectCrimeDetailSerializer(serializers.ModelSerializer):
 class SuspectCrimeCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = SuspectCrime
-        fields = ("suspect", "case", "status")
+        fields = ("suspect", "crime")
 
     def validate(self, data):
         if SuspectCrime.objects.filter(
-            suspect=data["suspect"], case=data.get("case")
+            suspect=data["suspect"], crime=data.get("crime")
         ).exists():
             raise serializers.ValidationError(
                 "This suspect has already been registered for this crime."
