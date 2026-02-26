@@ -35,7 +35,7 @@ class SuspectCrimeCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "This suspect has already been registered for this crime."
             )
-        return data
+        return super().validate(data)
 
     def create(self, validated_data):
         request = self.context["request"]
