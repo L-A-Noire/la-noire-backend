@@ -9,5 +9,5 @@ class Crime(models.Model):
         (4, "critical"),
     )
 
-    level = models.IntegerField(max_length=50, choices=LEVEL_CHOICES)
+    level = models.IntegerField(choices=LEVEL_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)

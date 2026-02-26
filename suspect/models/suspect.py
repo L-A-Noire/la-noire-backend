@@ -10,7 +10,7 @@ class Suspect(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name='suspect',
-        nulll=True,
+        null=True,
         blank=True,
     )
 

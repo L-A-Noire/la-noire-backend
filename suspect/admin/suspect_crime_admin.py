@@ -7,18 +7,13 @@ class SuspectCrimeAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "suspect",
-        "case",
-        "status",
-        "priority_score",
-        "reward_amount",
+        "crime",
         "added_at",
     )
     list_filter = (
-        "status",
         "added_at",
-        "wanted_since",
     )
     search_fields = (
         "suspect__username",
-        "case__id",
+        "crime__id",
     )

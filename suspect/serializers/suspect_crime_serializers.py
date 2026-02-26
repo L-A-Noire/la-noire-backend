@@ -41,9 +41,6 @@ class SuspectCrimeCreateSerializer(serializers.ModelSerializer):
         request = self.context["request"]
 
         validated_data["added_by"] = request.user
-        if validated_data.get("status") in ["wanted","most_wanted"]:
-            validated_data["wanted_since"] = validated_data.get("wanted_since", None)
-
         return super().create(validated_data)
 
 
@@ -63,7 +60,6 @@ class WantedSuspectSerializer(serializers.ModelSerializer):
             "crime_level",
             "crime_level_display",
             "status",
-            "wanted_since",
             "days_wanted",
             "priority_score",
             "reward_amount",
