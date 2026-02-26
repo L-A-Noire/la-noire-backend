@@ -13,5 +13,4 @@ from .suspect_crime_serializers import (
     SuspectCrimeCreateSerializer,
     SuspectCrimeDetailSerializer,
     SuspectCrimeSerializer,
-    WantedSuspectSerializer,
 )
