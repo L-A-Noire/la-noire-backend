@@ -28,6 +28,5 @@ urlpatterns = [
         DetectiveReviewView.as_view(),
         name="report-review-detective",
     ),
-    # Claim reward
     path("rewards/claim/", ClaimRewardView.as_view(), name="reward-claim"),
 ]

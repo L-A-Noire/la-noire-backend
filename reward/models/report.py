@@ -21,6 +21,7 @@ class Report(models.Model):
     )
 
     description = models.TextField()
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     STATUS_CHOICES = (
@@ -43,8 +44,6 @@ class Report(models.Model):
         related_name="reviewed_tips_officer",
     )
 
-    officer_rejection_reason = models.TextField(blank=True, null=True)
-
     detective = models.ForeignKey(
         to="user.User",
         on_delete=models.SET_NULL,
@@ -52,8 +51,6 @@ class Report(models.Model):
         blank=True,
         related_name="reviewed_tips_detective",
     )
-
-    detective_rejection_reason = models.TextField(blank=True, null=True)
 
     reward = models.OneToOneField(
         to="Reward",

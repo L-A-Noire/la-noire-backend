@@ -5,4 +5,3 @@ from .report_serializers import (
     ReportDetailSerializer,
 )
 from .reward_serializers import RewardSerializer, RewardDetailSerializer
-from .payment_serializers import PaymentSerializer, PaymentCreateSerializer
