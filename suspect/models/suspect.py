@@ -17,6 +17,7 @@ class Suspect(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     STATUS_CHOICES = (
+        ("suspected", "Suspected"),
         ("wanted", "Wanted"),
         ("most_wanted", "Most Wanted"),
         ("arrested", "Arrested"),
@@ -27,7 +28,12 @@ class Suspect(models.Model):
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
-        default="wanted",
+        default="suspected",
+    )
+
+    wanted_since = models.DateTimeField(
+        null=True,
+        blank=True,
     )
 
     priority_score = models.IntegerField(default=0)
@@ -37,7 +43,7 @@ class Suspect(models.Model):
     def calculate_days_wanted(self):
         if self.status not in ["wanted", "most_wanted"]:
             return 0
-        return (timezone.now() - self.created_at).days
+        return (timezone.now() - self.wanted_since).days
 
     def update_priority_score(self):
         days = self.calculate_days_wanted()
