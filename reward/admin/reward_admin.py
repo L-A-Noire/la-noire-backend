@@ -7,12 +7,9 @@ class RewardAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "unique_code",
-        "recipient",
-        "amount",
         "is_claimed",
         "claimed_at",
         "created_at",
-        "created_by",
     )
     list_filter = (
         "is_claimed",

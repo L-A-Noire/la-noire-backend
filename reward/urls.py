@@ -7,7 +7,7 @@ from reward.views import (
     OfficerReviewView,
     DetectiveReviewView,
     RewardViewSet,
-    ClaimRewardView,
+    ClaimRewardAPIView,
 )
 
 router = DefaultRouter()
@@ -28,5 +28,5 @@ urlpatterns = [
         DetectiveReviewView.as_view(),
         name="report-review-detective",
     ),
-    path("rewards/claim/", ClaimRewardView.as_view(), name="reward-claim"),
+    path("rewards/claim/", ClaimRewardAPIView.as_view(), name="reward-claim"),
 ]
