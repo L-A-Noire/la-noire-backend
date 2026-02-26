@@ -1,6 +1,7 @@
 from django.db import models
 
 from crime.models import Crime, Case
+from witness.models import Testimony
 
 
 class CrimeScene(models.Model):
@@ -16,6 +17,14 @@ class CrimeScene(models.Model):
         to="user.User",
         on_delete=models.PROTECT,
         related_name="examined_scenes",
+        null=True,
+        blank=True,
+    )
+
+    testimony = models.OneToOneField(
+        to=Testimony,
+        on_delete=models.DO_NOTHING,
+        related_name="crime_scene",
         null=True,
         blank=True,
     )
@@ -39,9 +48,13 @@ class CrimeScene(models.Model):
         crime = Crime.objects.create(
             level=crime_level
         )
-        Case.objects.create(
+        case = Case.objects.create(
             crime=crime,
             is_from_crime_scene=True,
         )
+
+        if self.testimony:
+            self.testimony.case = case
+            self.testimony.save()
         self.crime = crime
         self.save()
