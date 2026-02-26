@@ -1,8 +1,9 @@
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.response import Response 
 
 from suspect.models.suspect import Suspect
 from suspect.serializers.suspect_serializers import SuspectSerializer
@@ -38,3 +39,13 @@ class SuspectModelViewSet(viewsets.ModelViewSet):
             suspect.status = "wanted"
             suspect.wanted_since = timezone.now()
             suspect.save()
+
+            serializer = self.get_serializer(suspect)
+            return Response({
+                "message": "Suspect marked as wanted successfully",
+                "suspect": serializer.data
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                "error": f"Cannot mark suspect with status '{suspect.status}' as wanted"
+            }, status=status.HTTP_400_BAD_REQUEST)

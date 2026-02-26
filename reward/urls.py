@@ -3,11 +3,12 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from reward.views import (
-    ReportViewSet,
-    OfficerReviewView,
-    DetectiveReviewView,
-    RewardViewSet,
     ClaimRewardAPIView,
+    DetectiveReviewView,
+    MyRewardsView,
+    OfficerReviewView,
+    ReportViewSet,
+    RewardViewSet,
 )
 
 router = DefaultRouter()
@@ -29,4 +30,5 @@ urlpatterns = [
         DetectiveReviewView.as_view(),
         name="report-review-detective",
     ),
+    path("my-rewards/", MyRewardsView.as_view(), name="my-rewards"),
 ]
