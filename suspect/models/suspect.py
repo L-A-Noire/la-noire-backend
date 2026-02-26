@@ -79,6 +79,9 @@ class Suspect(models.Model):
             max_level=Max("crime__level")
         )["max_level"]
 
+        if level_value is None:
+            level_value = 1 
+
         self.priority_score = days * level_value
         self.reward_amount = self.priority_score * 20000000
 
