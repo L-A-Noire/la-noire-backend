@@ -17,8 +17,6 @@ class SuspectCrime(models.Model):
         to=Crime,
         on_delete=models.PROTECT,
         related_name="suspects",
-        null=True,
-        blank=True,
     )
 
     added_at = models.DateTimeField(auto_now_add=True)
