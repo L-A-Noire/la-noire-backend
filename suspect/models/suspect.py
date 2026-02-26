@@ -94,6 +94,7 @@ class Suspect(models.Model):
             self.status = "most_wanted"
 
     def save(self, *args, **kwargs):
-        self.update_priority_score()
-        self.mark_as_most_wanted_if_necessary()
+        if self.pk:
+            self.update_priority_score()
+            self.mark_as_most_wanted_if_necessary()
         super().save(*args, **kwargs)
