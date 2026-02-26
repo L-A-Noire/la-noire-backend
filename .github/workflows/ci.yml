@@ -60,6 +60,8 @@ jobs:
     env:
       SECRET_KEY: ci-test-secret-key
       DEBUG: "True"
+      BITPAY_API_KEY: ${{ secrets.BITPAY_API_KEY }}
+      FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
 
     steps:
       - uses: actions/checkout@v4
