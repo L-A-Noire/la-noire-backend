@@ -55,7 +55,9 @@ class ClaimRewardAPIView(APIView):
             )
 
         try:
-            reward = Reward.objects.get(unique_code=code, is_claimed=False)
+            reward = Reward.objects.get(
+                unique_code=code, is_claimed=False, recipient=request.user
+            )
         except Reward.DoesNotExist:
             return Response(
                 {"detail": "Invalid or already used reward code."},
@@ -68,6 +70,7 @@ class ClaimRewardAPIView(APIView):
 
         return Response(
             {
+                "status": status.HTTP_200_OK,
                 "detail": "Reward claimed successfully.",
                 "amount": reward.reward_amount,
             }
