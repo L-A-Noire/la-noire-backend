@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     "corsheaders",
     "django_filters",
     "crime",
-    "detective_board",
     "reward",
     "suspect",
     "user",
