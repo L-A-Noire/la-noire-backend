@@ -12,6 +12,17 @@ from reward.serializers import (
 from reward.permissions import CanViewRewardInfo
 
 
+class MyRewardsView(APIView):
+    """List rewards for the current user (e.g. Base User)."""
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        rewards = Reward.objects.filter(recipient=request.user).order_by("-created_at")
+        serializer = RewardSerializer(rewards, many=True)
+        return Response(serializer.data)
+
+
 class RewardViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Reward.objects.all()
     serializer_class = RewardSerializer
