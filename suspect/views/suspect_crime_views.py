@@ -1,21 +1,15 @@
-from datetime import timedelta
 from django.utils import timezone
 from rest_framework import generics, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from django.db.models import Max, F, Value, IntegerField, OuterRef, Subquery, Sum
-from django.db.models.functions import Coalesce
-from crime.models import Crime
-
 from suspect.models import SuspectCrime
-from suspect.permissions import IsDetective, IsSergeant
+from suspect.permissions import IsSergeant
 from suspect.serializers import (
     SuspectCrimeCreateSerializer,
     SuspectCrimeDetailSerializer,
     SuspectCrimeSerializer,
-    WantedSuspectSerializer,
 )
 
 
@@ -52,23 +46,6 @@ class SuspectCrimeViewSet(viewsets.ModelViewSet):
             return SuspectCrime.objects.none()
 
     @action(
-        detail=True, methods=["post"], permission_classes=[IsAuthenticated, IsDetective]
-    )
-    def mark_wanted(self, request, pk=None):
-        suspect_crime = self.get_object()
-        suspect_crime.status = "wanted"
-        suspect_crime.wanted_since = timezone.now()
-        suspect_crime.update_priority_score()
-
-        return Response(
-            {
-                "message": "Suspect has been added to the Most Wanted list.",
-                "suspect": SuspectCrimeDetailSerializer(suspect_crime).data,
-                "reward_amount": suspect_crime.reward_amount
-            }
-        )
-
-    @action(
         detail=True, methods=["post"], permission_classes=[IsAuthenticated, IsSergeant]
     )
     def arrest(self, request, pk=None):
@@ -84,21 +61,3 @@ class SuspectCrimeViewSet(viewsets.ModelViewSet):
                 "suspect": SuspectCrimeDetailSerializer(suspect_crime).data,
             }
         )
-
-
-class WantedSuspectsView(generics.ListAPIView):
-    serializer_class = WantedSuspectSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        suspects = SuspectCrime.objects.filter(
-            status__in=['wanted', 'most_wanted']
-        ).select_related('suspect', 'case', 'case__crime')
-
-        for suspect in suspects:
-            suspect.update_priority_score()
-
-
-        return SuspectCrime.objects.filter(
-            status__in=['wanted', 'most_wanted']
-        ).select_related('suspect', 'case', 'case__crime').order_by("-priority_score")

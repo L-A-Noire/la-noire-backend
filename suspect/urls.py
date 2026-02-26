@@ -9,19 +9,18 @@ from suspect.views import (
     ReviewInterrogationView,
     SubmitScoreView,
     SuspectCrimeViewSet,
-    WantedSuspectsView,
 )
+from suspect.views.suspect_views import SuspectModelViewSet
 
 router = DefaultRouter()
 router.include_format_suffixes = False
 router.register(r"suspect-crimes", SuspectCrimeViewSet, basename="suspect-crime")
 router.register(r"interrogations", InterrogationViewSet, basename="interrogation")
 router.register(r"punishments", PunishmentViewSet, basename="punishment")
+router.register("suspects", SuspectModelViewSet, basename="suspect")
 
 urlpatterns = [
     path("", include(router.urls)),
-    # Wanted suspects
-    path("wanted/", WantedSuspectsView.as_view(), name="wanted-suspects"),
     # Interrogation
     path(
         "interrogations/<int:pk>/submit-score/",
