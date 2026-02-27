@@ -17,3 +17,17 @@ class RewardDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reward
         fields = "__all__"
+
+
+class ClaimRewardRequestSerializer(serializers.Serializer):
+    reward_code = serializers.CharField()
+    national_id = serializers.CharField()
+
+
+class ClaimRewardResponseSerializer(serializers.Serializer):
+    detail = serializers.CharField()
+    amount = serializers.IntegerField()
+
+
+class ClaimRewardErrorSerializer(serializers.Serializer):
+    detail = serializers.CharField()
