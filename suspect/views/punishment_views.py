@@ -77,7 +77,7 @@ class IssuePunishmentView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
 
         punishment = serializer.save(
-            suspect_crime=suspect_crime, case=suspect_crime.case, issued_by=request.user
+            suspect_crime=suspect_crime, issued_by=request.user
         )
 
         return Response(

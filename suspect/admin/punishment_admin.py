@@ -9,7 +9,6 @@ class PunishmentAdmin(admin.ModelAdmin):
         "title",
         "punishment_type",
         "suspect_crime",
-        "case",
         "issued_by",
         "issued_at",
     )
@@ -22,6 +21,5 @@ class PunishmentAdmin(admin.ModelAdmin):
         "title",
         "description",
         "suspect_crime__suspect__username",
-        "case__id",
         "issued_by__username",
     )
