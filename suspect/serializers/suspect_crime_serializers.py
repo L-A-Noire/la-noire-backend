@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from crime.serializers import CaseSerializer
 from suspect.models import SuspectCrime
+from suspect.serializers.suspect_serializers import SuspectSerializer
 from user.seiralizers import UserSerializer
 
 
@@ -13,7 +14,7 @@ class SuspectCrimeSerializer(serializers.ModelSerializer):
 
 
 class SuspectCrimeDetailSerializer(serializers.ModelSerializer):
-    suspect_details = UserSerializer(source="suspect", read_only=True)
+    suspect_details = SuspectSerializer(source="suspect", read_only=True)
     case_details = CaseSerializer(source="case", read_only=True)
     added_by_details = UserSerializer(source="added_by", read_only=True)
     status_display = serializers.CharField(source="get_status_display", read_only=True)
