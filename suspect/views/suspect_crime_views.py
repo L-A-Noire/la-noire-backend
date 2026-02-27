@@ -32,7 +32,7 @@ class SuspectCrimeViewSet(viewsets.ModelViewSet):
 
         role = user.role.title
 
-        if role in ["Administrator", "Chief", "Captain"]:
+        if role in ["Administrator", "Chief", "Captain","Judge"]:
             return SuspectCrime.objects.all()
         elif role == "Detective":
             return SuspectCrime.objects.filter(crime__case__detective=user)
