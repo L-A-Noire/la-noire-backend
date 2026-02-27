@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
+from user.models import User
 from suspect.models import SuspectCrime
 from suspect.permissions import IsSergeant
 from suspect.serializers import (
@@ -37,8 +37,12 @@ class SuspectCrimeViewSet(viewsets.ModelViewSet):
         elif role == "Detective":
             return SuspectCrime.objects.filter(crime__case__detective=user)
         elif role == "Sergent":
+            detectives_under_sergeant = User.objects.filter(
+                role__title="Detective",
+                detective_cases__isnull=False
+            ).distinct()
             return SuspectCrime.objects.filter(
-                case__detective__in=user.detective_cases.all()
+                crime__case__detective__in=detectives_under_sergeant
             )
         elif role == "Judge":
             return SuspectCrime.objects.filter(status="convicted")
