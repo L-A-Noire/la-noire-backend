@@ -79,28 +79,32 @@ class User(AbstractUser):
 
     def save(self, *args, **kwargs):
         self.clean()
+        print("@@@@@@@@@@@@@@@@@@@@@")
+        print(self.pk)
+        print(self.email)
+        print(User.objects.all().values_list("email"))
         super().save(*args, **kwargs)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
                 fields=["username"],
-                condition=~Q(username__isnull=True),
-                name="unique_username_if_not_null",
+                condition=~Q(username__isnull=True) & ~Q(username=""),
+                name="unique_username_if_not_null_or_empty",
             ),
             models.UniqueConstraint(
                 fields=["email"],
-                condition=~Q(email__isnull=True),
-                name="unique_email_if_not_null",
+                condition=~Q(email__isnull=True) & ~Q(email=""),
+                name="unique_email_if_not_null_or_empty",
             ),
             models.UniqueConstraint(
                 fields=["phone"],
-                condition=~Q(phone__isnull=True),
-                name="unique_phone_if_not_null",
+                condition=~Q(phone__isnull=True) & ~Q(phone=""),
+                name="unique_phone_if_not_null_or_empty",
             ),
             models.UniqueConstraint(
                 fields=["national_id"],
-                condition=~Q(national_id__isnull=True),
-                name="unique_national_id_if_not_null",
+                condition=~Q(national_id__isnull=True) & ~Q(national_id=""),
+                name="unique_national_id_if_not_null_or_empty",
             ),
         ]
