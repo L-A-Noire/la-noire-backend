@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 
 from user.models import Role
 
@@ -35,13 +36,11 @@ class User(AbstractUser):
     )
 
     email = models.EmailField(
-        unique=True,
         null=True,
         blank=True,
     )
 
     phone = models.CharField(
-        unique=True,
         max_length=20,
         null=True,
         blank=True,
@@ -60,7 +59,6 @@ class User(AbstractUser):
     )
 
     national_id = models.CharField(
-        unique=True,
         max_length=20,
         null=True,
         blank=True,
@@ -73,7 +71,6 @@ class User(AbstractUser):
 
     objects = CustomUserManager()
 
-    # add constraint for existence of at least one of the identifiers
     def clean(self):
         if not any([self.username, self.email, self.phone, self.national_id]):
             raise ValidationError(
@@ -83,3 +80,27 @@ class User(AbstractUser):
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["username"],
+                condition=~Q(username__isnull=True),
+                name="unique_username_if_not_null",
+            ),
+            models.UniqueConstraint(
+                fields=["email"],
+                condition=~Q(email__isnull=True),
+                name="unique_email_if_not_null",
+            ),
+            models.UniqueConstraint(
+                fields=["phone"],
+                condition=~Q(phone__isnull=True),
+                name="unique_phone_if_not_null",
+            ),
+            models.UniqueConstraint(
+                fields=["national_id"],
+                condition=~Q(national_id__isnull=True),
+                name="unique_national_id_if_not_null",
+            ),
+        ]
