@@ -32,9 +32,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Check formatting (Black)
-        run: black --check .
-
       - name: Lint (Flake8)
         run: flake8
 

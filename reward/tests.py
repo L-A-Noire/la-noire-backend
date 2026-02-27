@@ -19,30 +19,26 @@ class RewardModuleTests(APITestCase):
             username="base",
             password="pass123",
             email="base@gmail.com",
-            role=Role.objects.get(title="Base User")
+            role=Role.objects.get(title="Base User"),
         )
 
         self.officer = User.objects.create_user(
             username="officer",
             password="pass123",
             email="officer@gmail.com",
-            role=Role.objects.get(title="Police/Patrol Officer")
+            role=Role.objects.get(title="Police/Patrol Officer"),
         )
 
         self.detective = User.objects.create_user(
             username="detective",
             password="pass123",
             email="detective@gmail.com",
-            role=Role.objects.get(title="Detective")
+            role=Role.objects.get(title="Detective"),
         )
 
-        self.crime = Crime.objects.create(
-            level=4
-        )
+        self.crime = Crime.objects.create(level=4)
 
-        self.case = Case.objects.create(
-            crime=self.crime
-        )
+        self.case = Case.objects.create(crime=self.crime)
 
         self.suspect = Suspect.objects.create(
             name="Suspect A",
