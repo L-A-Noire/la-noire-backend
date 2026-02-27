@@ -20,6 +20,7 @@ class RewardModuleTests(APITestCase):
             password="pass123",
             email="base@gmail.com",
             role=Role.objects.get(title="Base User"),
+            national_id="1234567890",
         )
 
         self.officer = User.objects.create_user(
@@ -118,12 +119,16 @@ class RewardModuleTests(APITestCase):
             created_by=self.detective,
         )
 
-        self.client.force_authenticate(self.base_user)
+        # Only police/officer roles can call claim endpoint (on behalf of recipient)
+        self.client.force_authenticate(self.officer)
 
         url = "/api/reward/rewards/claim/"
         response = self.client.post(
             url,
-            {"reward_code": str(reward.unique_code)},
+            {
+                "reward_code": str(reward.unique_code),
+                "national_id": self.base_user.national_id,
+            },
             format="json",
         )
 
@@ -139,12 +144,15 @@ class RewardModuleTests(APITestCase):
             claimed_at=timezone.now(),
         )
 
-        self.client.force_authenticate(self.base_user)
+        self.client.force_authenticate(self.officer)
 
         url = "/api/reward/rewards/claim/"
         response = self.client.post(
             url,
-            {"reward_code": str(reward.unique_code)},
+            {
+                "reward_code": str(reward.unique_code),
+                "national_id": self.base_user.national_id,
+            },
             format="json",
         )
 
