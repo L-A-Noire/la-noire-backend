@@ -8,7 +8,12 @@ from user.views import (
     RoleRetrieveUpdateDestroyView,
     UserDetailView,
 )
-from user.views.user_views import EmployeesCountView
+from user.views.user_views import (
+    EmployeesCountView,
+    UserListView,
+    UserRoleUpdateView,
+    UserRoleDetailView,
+)
 
 urlpatterns = [
     # Auth URLs
@@ -21,5 +26,8 @@ urlpatterns = [
     path(
         "roles/<int:pk>/", RoleRetrieveUpdateDestroyView.as_view(), name="role-detail"
     ),
+    path("users/", UserListView.as_view(), name="user-list"),
+    path("users/<int:pk>/role/", UserRoleDetailView.as_view(), name="user-role-detail"),
+    path("users/change-role/", UserRoleUpdateView.as_view(), name="user-change-role"),
     path("employees-count/", EmployeesCountView.as_view(), name="employees-count"),
 ]

@@ -107,3 +107,48 @@ class LoginSerializer(serializers.Serializer):
 
         data["user"] = user
         return data
+
+
+class UserListWithRoleSerializer(serializers.ModelSerializer):
+    role_title = serializers.CharField(source="role.title", read_only=True)
+    role_id = serializers.IntegerField(source="role.id", read_only=True)
+    
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "username",
+            "email",
+            "phone",
+            "first_name",
+            "last_name",
+            "national_id",
+            "role_id",
+            "role_title",
+            "is_active",
+            "date_joined",
+        )
+        read_only_fields = ("id", "date_joined")
+
+
+class ChangeUserRoleSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField(required=True)
+    role_id = serializers.IntegerField(required=True)
+    
+    def validate(self, data):
+        user_id = data.get("user_id")
+        role_id = data.get("role_id")
+        
+        try:
+            user = User.objects.get(id=user_id)
+            data["user"] = user
+        except User.DoesNotExist:
+            raise serializers.ValidationError({"user_id": "User not found."})
+        
+        try:
+            role = Role.objects.get(id=role_id)
+            data["role"] = role
+        except Role.DoesNotExist:
+            raise serializers.ValidationError({"role_id": "Role not found."})
+        
+        return data
