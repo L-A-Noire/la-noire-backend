@@ -4,4 +4,10 @@ from .report_serializers import (
     ReportReviewSerializer,
     ReportDetailSerializer,
 )
-from .reward_serializers import RewardSerializer, RewardDetailSerializer
+from .reward_serializers import (
+    ClaimRewardErrorSerializer,
+    ClaimRewardRequestSerializer,
+    ClaimRewardResponseSerializer,
+    RewardDetailSerializer,
+    RewardSerializer,
+)

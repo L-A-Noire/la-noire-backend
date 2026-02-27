@@ -19,30 +19,27 @@ class RewardModuleTests(APITestCase):
             username="base",
             password="pass123",
             email="base@gmail.com",
-            role=Role.objects.get(title="Base User")
+            role=Role.objects.get(title="Base User"),
+            national_id="1234567890",
         )
 
         self.officer = User.objects.create_user(
             username="officer",
             password="pass123",
             email="officer@gmail.com",
-            role=Role.objects.get(title="Police/Patrol Officer")
+            role=Role.objects.get(title="Police/Patrol Officer"),
         )
 
         self.detective = User.objects.create_user(
             username="detective",
             password="pass123",
             email="detective@gmail.com",
-            role=Role.objects.get(title="Detective")
+            role=Role.objects.get(title="Detective"),
         )
 
-        self.crime = Crime.objects.create(
-            level=4
-        )
+        self.crime = Crime.objects.create(level=4)
 
-        self.case = Case.objects.create(
-            crime=self.crime
-        )
+        self.case = Case.objects.create(crime=self.crime)
 
         self.suspect = Suspect.objects.create(
             name="Suspect A",
@@ -122,12 +119,16 @@ class RewardModuleTests(APITestCase):
             created_by=self.detective,
         )
 
-        self.client.force_authenticate(self.base_user)
+        # Only police/officer roles can call claim endpoint (on behalf of recipient)
+        self.client.force_authenticate(self.officer)
 
         url = "/api/reward/rewards/claim/"
         response = self.client.post(
             url,
-            {"reward_code": str(reward.unique_code)},
+            {
+                "reward_code": str(reward.unique_code),
+                "national_id": self.base_user.national_id,
+            },
             format="json",
         )
 
@@ -143,12 +144,15 @@ class RewardModuleTests(APITestCase):
             claimed_at=timezone.now(),
         )
 
-        self.client.force_authenticate(self.base_user)
+        self.client.force_authenticate(self.officer)
 
         url = "/api/reward/rewards/claim/"
         response = self.client.post(
             url,
-            {"reward_code": str(reward.unique_code)},
+            {
+                "reward_code": str(reward.unique_code),
+                "national_id": self.base_user.national_id,
+            },
             format="json",
         )
 

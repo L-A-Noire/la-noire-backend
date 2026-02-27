@@ -68,3 +68,27 @@ class ScoreSubmissionSerializer(serializers.Serializer):
         if value < 1 or value > 10:
             raise serializers.ValidationError("Score must be between 1 and 10.")
         return value
+
+class InterrogationCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Interrogation
+        fields = ("suspect_crime", "case", "location", "notes")
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        user = request.user
+        
+        from user.models import User
+        
+        opposite_role = "Sergent" if user.role.title == "Detective" else "Detective"
+        
+        partner = User.objects.filter(role__title=opposite_role).exclude(id=user.id).first()
+        
+        if not partner:
+            raise serializers.ValidationError(f"No {opposite_role} available for interrogation")
+        
+        interrogation = Interrogation.objects.create(**validated_data)
+        
+        interrogation.interrogators.set([user.id, partner.id])
+        
+        return interrogation
