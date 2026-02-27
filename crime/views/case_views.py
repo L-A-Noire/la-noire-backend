@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from crime.models import Case
 from crime.permissions import IsDetective, IsSergeant
 from crime.serializers import CaseDetailSerializer, CaseListSerializer, CaseSerializer
+from suspect.permissions import IsJudge
 
 
 class CaseViewSet(viewsets.ModelViewSet):
@@ -30,7 +31,7 @@ class CaseViewSet(viewsets.ModelViewSet):
 
         role = user.role.title
 
-        if role in ["Administrator", "Chief", "Captain", "Sergent","Judge"]:
+        if role in ["Administrator", "Chief", "Captain", "Sergent", "Judge"]:
             return Case.objects.all()
         elif role == "Detective":
             return Case.objects.filter(detective=user)
@@ -63,7 +64,7 @@ class CaseViewSet(viewsets.ModelViewSet):
             )
 
     @action(
-        detail=True, methods=["post"], permission_classes=[IsAuthenticated, IsSergeant]
+        detail=True, methods=["post"], permission_classes=[IsAuthenticated & (IsSergeant | IsJudge)]
     )
     def close_case(self, request, pk=None):
         case = self.get_object()
