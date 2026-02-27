@@ -54,6 +54,7 @@ class InterrogationViewSet(viewsets.ModelViewSet):
 class SubmitScoreView(generics.UpdateAPIView):
     serializer_class = ScoreSubmissionSerializer
     permission_classes = [IsAuthenticated]
+    queryset = Interrogation.objects.all()
 
     def update(self, request, *args, **kwargs):
         interrogation = self.get_object()
@@ -93,6 +94,7 @@ class SubmitScoreView(generics.UpdateAPIView):
 class ReviewInterrogationView(generics.UpdateAPIView):
     serializer_class = ScoreSubmissionSerializer
     permission_classes = [IsAuthenticated, IsCaptain]
+    queryset = Interrogation.objects.all()
 
     def update(self, request, *args, **kwargs):
         interrogation = self.get_object()
