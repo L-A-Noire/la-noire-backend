@@ -106,18 +106,35 @@ class ReviewInterrogationView(generics.UpdateAPIView):
         interrogation.final_score = final_score
         interrogation.reviewed_by = request.user
 
-        if final_score >= 7:
-            interrogation.suspect_crime.status = "convicted"
-            interrogation.suspect_crime.save()
-        elif final_score <= 3:
-            interrogation.suspect_crime.status = "innocent"
-            interrogation.suspect_crime.save()
+        suspect_crime = interrogation.suspect_crime
+        suspect = suspect_crime.suspect
 
+        if final_score >= 7:
+            # Convicted
+            suspect_crime.status = "convicted"
+            suspect.status = "convicted"
+            message = "Suspect has been convicted. Case will proceed to trial."
+        elif final_score <= 3:
+            # Innocent
+            suspect_crime.status = "innocent"
+            suspect.status = "innocent"
+            message = "Suspect has been found innocent and will be released."
+        else:
+            # Inconclusive - keep as arrested for further investigation
+            suspect_crime.status = "arrested"
+            suspect.status = "arrested"
+            message = "Results inconclusive. Suspect remains in custody for further investigation."
+
+        # Save both
+        suspect_crime.save()
+        suspect.save()
         interrogation.save()
 
         return Response(
             {
-                "message": "Interrogation has been successfully reviewed.",
+                "message": message,
                 "interrogation": InterrogationDetailSerializer(interrogation).data,
+                "suspect_status": suspect.status,
+                "suspect_crime_status": suspect_crime.status,
             }
         )
