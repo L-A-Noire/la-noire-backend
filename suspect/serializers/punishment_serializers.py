@@ -41,7 +41,6 @@ class PunishmentCreateSerializer(serializers.ModelSerializer):
         model = Punishment
         fields = (
             "suspect_crime",
-            "case",
             "punishment_type",
             "title",
             "description",
