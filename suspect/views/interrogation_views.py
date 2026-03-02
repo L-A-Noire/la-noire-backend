@@ -17,7 +17,7 @@ class InterrogationViewSet(viewsets.ModelViewSet):
     queryset = Interrogation.objects.all()
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['case']
+    filterset_fields = ["case"]
 
     def get_serializer_class(self):
         if self.action == "create":

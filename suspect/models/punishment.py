@@ -1,7 +1,5 @@
 from django.db import models
 
-from crime.models import Case
-
 
 class Punishment(models.Model):
     PUNISHMENT_TYPES = (

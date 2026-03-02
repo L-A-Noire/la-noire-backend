@@ -31,36 +31,6 @@ class InterrogationDetailSerializer(serializers.ModelSerializer):
         return SuspectCrimeSerializer(obj.suspect_crime).data
 
 
-class InterrogationCreateSerializer(serializers.ModelSerializer):
-    interrogator_ids = serializers.ListField(
-        child=serializers.IntegerField(), write_only=True
-    )
-
-    class Meta:
-        model = Interrogation
-        fields = ("suspect_crime", "case", "location", "notes", "interrogator_ids")
-
-    def validate_interrogator_ids(self, value):
-        from user.models import User
-
-        if len(value) != 2:
-            raise serializers.ValidationError(
-                "Exactly two interrogators (a detective and a sergeant) must be assigned."
-            )
-
-        users = User.objects.filter(id__in=value)
-        if len(users) != len(value):
-            raise serializers.ValidationError("Some interrogators were not found.")
-
-        return value
-
-    def create(self, validated_data):
-        interrogator_ids = validated_data.pop("interrogator_ids")
-        interrogation = Interrogation.objects.create(**validated_data)
-        interrogation.interrogators.set(interrogator_ids)
-        return interrogation
-
-
 class ScoreSubmissionSerializer(serializers.Serializer):
     score = serializers.IntegerField(min_value=1, max_value=10)
 
@@ -69,26 +39,31 @@ class ScoreSubmissionSerializer(serializers.Serializer):
             raise serializers.ValidationError("Score must be between 1 and 10.")
         return value
 
+
 class InterrogationCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interrogation
         fields = ("suspect_crime", "case", "location", "notes")
 
     def create(self, validated_data):
-        request = self.context.get('request')
+        request = self.context.get("request")
         user = request.user
-        
+
         from user.models import User
-        
+
         opposite_role = "Sergent" if user.role.title == "Detective" else "Detective"
-        
-        partner = User.objects.filter(role__title=opposite_role).exclude(id=user.id).first()
-        
+
+        partner = (
+            User.objects.filter(role__title=opposite_role).exclude(id=user.id).first()
+        )
+
         if not partner:
-            raise serializers.ValidationError(f"No {opposite_role} available for interrogation")
-        
+            raise serializers.ValidationError(
+                f"No {opposite_role} available for interrogation"
+            )
+
         interrogation = Interrogation.objects.create(**validated_data)
-        
+
         interrogation.interrogators.set([user.id, partner.id])
-        
+
         return interrogation

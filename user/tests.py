@@ -56,7 +56,7 @@ class UserModuleTests(APITestCase):
         self.assertEqual(user.role.title, "Base User")
 
     def test_login_fails_with_wrong_password(self):
-        user = User.objects.create_user(
+        User.objects.create_user(
             username="testuser",
             password="correctpass",
             role=self.base_role,
