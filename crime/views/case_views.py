@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from crime.models import Case
+from crime.models import Case, CaseReport, Complaint, CrimeScene
 from crime.permissions import IsDetective, IsSergeant
 from crime.serializers import CaseDetailSerializer, CaseListSerializer, CaseSerializer
 from suspect.permissions import IsJudge
@@ -76,32 +76,71 @@ class CaseViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["get"], permission_classes=[IsAuthenticated])
     def timeline(self, request, pk=None):
-        """Case timeline (complaints, crime scenes, reports)"""
         case = self.get_object()
 
-        data = {"complaints": [], "crime_scenes": [], "reports": []}
+        assigned_detective = None
+        if case.detective_id:
+            assigned_detective = {
+                "id": case.detective.id,
+                "name": case.detective.get_full_name() or case.detective.username,
+            }
 
-        complaints = case.complaints.all()
-        for complaint in complaints:
-            data["complaints"].append(
+        events = [
+            {
+                "type": "case_opened",
+                "date": case.created_at,
+                "assigned_detective": assigned_detective,
+            },
+        ]
+
+        for complaint in Complaint.objects.filter(case=case).values(
+            "id", "description", "status", "created_at"
+        ):
+            events.append(
                 {
-                    "id": complaint.id,
-                    "description": complaint.description,
-                    "status": complaint.status,
-                    "created_at": complaint.created_at,
+                    "type": "complaint",
+                    "date": complaint["created_at"],
+                    "id": complaint["id"],
+                    "description": complaint["description"],
+                    "status": complaint["status"],
                 }
             )
 
-        if hasattr(case, "case_report"):
-            crime_scenes = case.case_report.crime_scenes.all()
-            for scene in crime_scenes:
-                data["crime_scenes"].append(
+        if case.crime_id:
+            for scene in CrimeScene.objects.filter(crime=case.crime).values(
+                "id", "location", "seen_at", "is_confirmed"
+            ):
+                events.append(
                     {
-                        "id": scene.id,
-                        "location": scene.location,
-                        "seen_at": scene.seen_at,
-                        "is_confirmed": scene.is_confirmed,
+                        "type": "crime_scene",
+                        "date": scene["seen_at"],
+                        "id": scene["id"],
+                        "location": scene["location"],
+                        "is_confirmed": scene["is_confirmed"],
                     }
                 )
 
-        return Response(data)
+        for report in CaseReport.objects.filter(case=case).values(
+            "id", "description", "status", "reported_at"
+        ):
+            events.append(
+                {
+                    "type": "report",
+                    "date": report["reported_at"],
+                    "id": report["id"],
+                    "description": report["description"],
+                    "status": report["status"],
+                }
+            )
+
+        events.sort(key=lambda e: (e["date"] is None, e["date"]))
+
+        return Response(
+            {
+                "case": {
+                    "opened_date": case.created_at,
+                    "assigned_detective": assigned_detective,
+                },
+                "timeline": events,
+            }
+        )

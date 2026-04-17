@@ -36,7 +36,7 @@ class CrimeSceneCreateSerializer(serializers.ModelSerializer):
 class CrimeSceneDetailSerializer(serializers.ModelSerializer):
     viewer_details = UserSerializer(source="viewer", read_only=True)
     examiner_details = UserSerializer(source="examiner", read_only=True)
-    witnesses_details = UserSerializer(source="witnesses", many=True, read_only=True)
+    witness_details = UserSerializer(source="witness", read_only=True)
 
     class Meta:
         model = CrimeScene
