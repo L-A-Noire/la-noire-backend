@@ -2,6 +2,7 @@
 Comprehensive mock data seeding for LA Noire Police System
 Covers all scenarios and user roles
 """
+
 import io
 import random
 from datetime import timedelta
@@ -141,9 +142,7 @@ class Command(BaseCommand):
             self.stdout.write("Creating reports...")
             self._create_reports(faker, users, cases, suspects, count)
 
-        self.stdout.write(
-            self.style.SUCCESS("✓ Mock data successfully created!")
-        )
+        self.stdout.write(self.style.SUCCESS("✓ Mock data successfully created!"))
         self.stdout.write(f"- Users: {User.objects.count()}")
         self.stdout.write(f"- Suspects: {Suspect.objects.count()}")
         self.stdout.write(f"- Crimes: {Crime.objects.count()}")
@@ -369,8 +368,6 @@ class Command(BaseCommand):
 
     def _create_crime_scenes(self, faker, users, cases, count):
         """Create crime scenes"""
-        officers = users["by_role"].get("Officer", [])
-        patrol_officers = users["by_role"].get("Patrol Officer", [])
         all_users = users["all"]
 
         scenes = []
@@ -402,18 +399,22 @@ class Command(BaseCommand):
             if cases:
                 evidence = BiologicalEvidence.objects.create(
                     case=random.choice(cases),
-                    title=random.choice(["Blood Sample", "Hair Sample", "DNA Evidence"]),
+                    title=random.choice(
+                        ["Blood Sample", "Hair Sample", "DNA Evidence"]
+                    ),
                     description=faker.paragraph(nb_sentences=2),
                     seen_at=timezone.now() - timedelta(days=random.randint(1, 30)),
                     created_by=random.choice(all_users) if all_users else None,
                     location=faker.address(),
                     coronary=random.choice(coroners) if coroners else None,
-                    result=faker.paragraph(nb_sentences=2) if random.choice([True, False]) else None,
+                    result=(
+                        faker.paragraph(nb_sentences=2)
+                        if random.choice([True, False])
+                        else None
+                    ),
                 )
                 if images:
-                    evidence.images.add(
-                        *random.sample(images, k=min(2, len(images)))
-                    )
+                    evidence.images.add(*random.sample(images, k=min(2, len(images))))
                 evidence_count += 1
 
         # Vehicle Evidence
@@ -453,7 +454,9 @@ class Command(BaseCommand):
                     owner_first_name=faker.first_name(),
                     owner_last_name=faker.last_name(),
                     information={
-                        "id_type": random.choice(["Passport", "Driver License", "ID Card"]),
+                        "id_type": random.choice(
+                            ["Passport", "Driver License", "ID Card"]
+                        ),
                         "number": faker.bothify(text="##########"),
                     },
                 )
@@ -474,9 +477,7 @@ class Command(BaseCommand):
                 )
                 if attachments:
                     testimony.attachments.add(
-                        *random.sample(
-                            attachments, k=min(2, len(attachments))
-                        )
+                        *random.sample(attachments, k=min(2, len(attachments)))
                     )
                 evidence_count += 1
 
@@ -514,9 +515,7 @@ class Command(BaseCommand):
             image.save(buffer, format="PNG")
             try:
                 img = Image.objects.create(
-                    image=ContentFile(
-                        buffer.getvalue(), name=f"evidence-{_}.png"
-                    ),
+                    image=ContentFile(buffer.getvalue(), name=f"evidence-{_}.png"),
                     uploaded_by=random.choice(all_users) if all_users else None,
                 )
                 images.append(img)
@@ -554,9 +553,11 @@ class Command(BaseCommand):
         for suspect in suspects[: min(count * 2, len(suspects))]:
             # Associate each suspect with 1-3 crimes
             # Use only crimes that have associated cases
-            crimes_with_cases = [crime for crime in crimes if hasattr(crime, 'case') and crime.case]
+            crimes_with_cases = [
+                crime for crime in crimes if hasattr(crime, "case") and crime.case
+            ]
             if not crimes_with_cases:
-                crimes_with_cases = crimes[:min(3, len(crimes))]
+                crimes_with_cases = crimes[: min(3, len(crimes))]
 
             num_crimes = random.randint(1, min(3, len(crimes_with_cases)))
             for crime in random.sample(crimes_with_cases, k=num_crimes):
@@ -568,7 +569,9 @@ class Command(BaseCommand):
                 )
                 suspect_crimes.append(suspect_crime)
 
-        self.stdout.write(f"  ✓ Created {len(suspect_crimes)} suspect-crime relationships")
+        self.stdout.write(
+            f"  ✓ Created {len(suspect_crimes)} suspect-crime relationships"
+        )
         return suspect_crimes
 
     def _create_interrogations(self, faker, suspect_crimes, users, count):
@@ -583,12 +586,8 @@ class Command(BaseCommand):
                 case=suspect_crime.crime.case if suspect_crime.crime.case else None,
                 location=faker.address(),
                 notes=faker.paragraph(nb_sentences=4),
-                detective_score=(
-                    random.randint(0, 10) if detectives else None
-                ),
-                sergeant_score=(
-                    random.randint(0, 10) if sergeants else None
-                ),
+                detective_score=(random.randint(0, 10) if detectives else None),
+                sergeant_score=(random.randint(0, 10) if sergeants else None),
                 final_score=random.randint(0, 10),
             )
 
@@ -625,10 +624,15 @@ class Command(BaseCommand):
                     random.randint(1, 36) if punishment_type == "imprisonment" else None
                 ),
                 issued_by=random.choice(judges),
-                is_paid=random.choice([True, False]) if punishment_type in ["fine", "bail"] else False,
+                is_paid=(
+                    random.choice([True, False])
+                    if punishment_type in ["fine", "bail"]
+                    else False
+                ),
                 paid_at=(
                     timezone.now() - timedelta(days=random.randint(1, 60))
-                    if punishment_type in ["fine", "bail"] and random.choice([True, False])
+                    if punishment_type in ["fine", "bail"]
+                    and random.choice([True, False])
                     else None
                 ),
             )
@@ -666,9 +670,9 @@ class Command(BaseCommand):
         transactions = []
 
         transaction_statuses = [
-            (True, True),   # successful & used
+            (True, True),  # successful & used
             (True, False),  # successful & unused
-            (False, False), # failed
+            (False, False),  # failed
         ]
 
         for _ in range(count * 3):
